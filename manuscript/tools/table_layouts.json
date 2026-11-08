@@ -177,7 +177,7 @@
   },
   "g1": {
     "label": "tab:g1",
-    "caption": "G1: agreement among extractable generated answers, unextractable fraction (Unext.), accepted fraction and selective risks. All cells use 500 robustness keys. Acceptance uses re-scored original-order confidence and the original MSA threshold. Equal risks need not imply identical answers.",
+    "caption": "G1 on 500 keys per variety. Agreement excludes unextractable answers (Unext.). Acceptance uses original-order re-scoring and the original MSA threshold.",
     "weights": [
       0.13386,
       0.08661,

@@ -1,0 +1,26 @@
+{
+  "variety_order": [
+    "MAG",
+    "SYR",
+    "EGY",
+    "KSA",
+    "UAE"
+  ],
+  "archived_counts": [
+    3,
+    3,
+    3,
+    1,
+    1
+  ],
+  "replayed_counts": [
+    2,
+    3,
+    3,
+    1,
+    1
+  ],
+  "denominator": 4,
+  "threshold": "at least 2/3 of full-sample P1 gap retained in most-similar tercile",
+  "manuscript_qualified": true
+}

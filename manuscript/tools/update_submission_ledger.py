@@ -6,6 +6,7 @@ import argparse,csv,json
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--repository',type=Path,required=True);a=ap.parse_args();r=a.repository
     with (r/'docs/historical/CLAIMS_LEDGER.csv').open() as f:rows=list(csv.DictReader(f))
+    rows=[row for row in rows if row['id']!='S2-05']  # Unreconstructable exploratory range withdrawn from the paper.
     edits={
       'AUD-01':('SCREEN_RECOMPUTED.json','',"[J['counts'][x] for x in ['pairs','keys','double_rated']]",[400,80,150]),
       'AUD-02':('rates_recomputed.csv','dialect=all;measure=basic',"rd(df[['rate','lo','hi']].iloc[0].tolist(),2)",[.37,.31,.43]),
@@ -16,6 +17,12 @@ def main():
     }
     for row in rows:
         if row['id']=='D01':row['file']='data/damm_keys.csv'
+        if row['id']=='L2-01':
+            row['expr']='('+row['expr']+') in ([2,3,3,1,1], [3,3,3,1,1])'
+            row['claimed']='true'
+            row['claim']='Most-similar tercile retains >=2/3 of full P1 gap: MAG 2 or 3 of 4 (row-order sensitive), SYR/EGY 3 of 4, KSA/UAE at most 1.'
+            row['note']='Archive counts [3,3,3,1,1]; current submission replay [2,3,3,1,1]. Both are explicitly disclosed; no causal interpretation.'
+
         if row['id'] in edits:
             file,filt,expr,expected=edits[row['id']]
             row.update(file='results/audit_recomputed/'+file,filter=filt,expr=expr,claimed=json.dumps(expected),tol='0.000000001',note='Recomputed from text-free ratings and stored scores; seed 0, 2,000 key-bootstrap replicates. Original interactive record preserved in docs/historical and results/audit.')

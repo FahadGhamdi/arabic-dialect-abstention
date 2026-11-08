@@ -1,6 +1,6 @@
 # Risk and Coverage across Arabic Dialects in Selective Question Answering
 
-Submission companion v1.0, prepared from the public repository at commit
+Submission companion v1.0 (Git tag `v1.0`, 9 November 2026), prepared from the public repository at commit
 `8e103a0dacb7762e2f4f3ba47ad48a81eb602102`. This archive includes corrections
 and additions made during the submission audit; the cited historical GitHub
 commit does not contain those additions. See `docs/SUBMISSION_AUDIT.md`.
@@ -33,6 +33,7 @@ private or replay directories and generated screening outputs.
 
 ```sh
 python tools/check_score_integrity.py --repository . --output score_check.json
+python tools/check_independent_cells.py --repository . --output independent_cells.json
 python tools/audit_screen.py --ratings-dir results/audit_recomputed
 python tools/audit_sensitivity.py --repository . --ratings-dir results/audit_recomputed
 python tools/update_submission_ledger.py --repository .
@@ -77,6 +78,6 @@ retroactive record of model inference. Stored-score consistency does not prove
 the provenance of a historical model run. See the detailed audit for exact scope.
 
 The source datasets remain available from their publishers under their own terms.
-Code is licensed under MIT; result tables and documentation follow `LICENSE-DATA.md`.
+Code is licensed under MIT; result tables and documentation follow `LICENSE-DATA.md`. The supplied MDPI template retains its own copyright and licence notices.
 No DOI is asserted for this prepared archive. Journal-assigned identifiers in the
 official submission template are placeholders until assigned by the publisher.

@@ -12,11 +12,13 @@ Source inspected directly: https://github.com/FahadGhamdi/arabic-dialect-abstent
 6. The independent recomputation script had an absolute project root, and L2 expected an undocumented pickle of the published flags. The isolated replay supplies that equivalent input and records the path/report adaptations. The original scripts remain unchanged.
 7. The manuscript source now includes its promised `tools/`, table generator and file index. All ten supplied MDPI template files are unchanged. No model weights, source question texts or private workbook are included.
 
+The exploratory ALLaM–MAG calibration-resampling range 0.63–0.70 was quoted only in a historical summary; the script, seed and exact resampling convention were not saved. This numerical illustration and its current ledger row S2-05 were removed from the submission. The observed own-variety coverage 0.657 is reproducible and remains. The historical summary and ledger are preserved.
+
 ## Executed checks
 
 - 16 stored-score files; 167,696 records. No duplicate scoring identities; correctness equals prediction-versus-answer comparison. Probability reconstruction agrees within 0.0001, consistent with stored rounding. Split sizes 404/808/1,420 are disjoint and exclude the 500 development and three demonstration keys.
 - Seven numerical programs, including the independent check, were run in an isolated release copy. The replay records exact statuses in `REPLAY_RUN.json`; no inference was run. NumPy/pandas/SciPy/PyArrow versions are recorded in `SUBMISSION_ENVIRONMENT.json`.
-- The current ledger passes 105 computable rows with zero failures; three rows remain source/report-derived. Ledger agreement is a consistency check, not independent provenance evidence.
+- The current ledger passes 105 computable rows with zero failures; two rows remain source/report-derived. A separate check also reproduces the independent-report per-key agreements: 39,759/39,760 accepted decisions and 39,755/39,760 set-coverage decisions. Ledger agreement is a consistency check, not independent provenance evidence.
 - S4 and P2 tables, P1 point estimates, S2, and primary-target D4 results reproduce. Differences in other outputs are listed below, and the recomputed CSVs are provided under `verification_outputs/`.
 
 | Result file | Rows | Maximum absolute numeric difference | Columns differing above 1e-12 |
@@ -46,7 +48,7 @@ Source inspected directly: https://github.com/FahadGhamdi/arabic-dialect-abstent
 | results/validity/L2_fidelity.csv | 80 | 1 | n, sim_mean, dacc, dacc_lo, dacc_hi, chg, chg_lo, chg_hi, dp1, dp1_lo, dp1_hi, dcov, dcov_lo, dcov_hi, dans, dans_lo, dans_hi |
 | results/validity/L4_aradice.csv | 8 | 0.0035535714 | dacc_lo, dacc_hi, chg_lo, chg_hi, dp1_lo, dp1_hi, dcov_lo, dcov_hi, dans_lo, dans_hi |
 
-The largest D4 difference occurs for Qwen3–SYR at secondary target 0.15: realised risk 0.16336 in the archive versus 0.14385 in this replay; the 0.20 target used in the manuscript is unchanged. L2 uses row-order tie breaking for similarity terciles, which can move one item and alter interval bounds. Default confidence sorting and stored rounding also affect some resampled statistics. These differences are disclosed rather than overwritten or described as exact replication.
+The largest D4 difference occurs for Qwen3–SYR at secondary target 0.15: realised risk 0.16336 in the archive versus 0.14385 in this replay; the 0.20 target used in the manuscript is unchanged. L2 uses row-order tie breaking for similarity terciles, which can move one item and alter interval bounds. The MAG count retaining at least two thirds of the full P1 gap is 3/4 in the archive and 2/4 in the current replay; SYR and EGY remain 3/4, and KSA/UAE remain 1/4. The manuscript now states the MAG count as two or three depending on tie breaking. Default confidence sorting and stored rounding also affect some resampled statistics. These differences are disclosed rather than overwritten or described as exact replication.
 
 ## What was not verified
 

@@ -1,6 +1,6 @@
 # Ledger consistency audit
 
-Rows: 108 — PASS 105, FAIL/ERROR 0, report-sourced (not recomputed) 3.
+Rows: 107 — PASS 105, FAIL/ERROR 0, report-sourced (not recomputed) 2.
 
 A consistency audit compares the manuscript's numbers and their stated comparison/denominator/interval type with the
 frozen result files; it is not an independent re-computation (that is Appendix C / results/indep_check).
@@ -46,7 +46,7 @@ frozen result files; it is not an independent re-computation (that is Appendix C
 | D4-10 | §3.3 (dropped in v0.3) / T3 | closer to 0.20 in 11/20 cells (distance framing; superseded by D4-06/07) | results/sens/S94_D4_distance.csv | 11 | 11 | **PASS** |
 | IC-01 | §3.1/App. C / EXT | independent implementation reproduces P1 exactly; S4 (r*≤0.25) and P2 to one boundary item; per-key 39,759/39,760 (S4) and 39,755/39,760 (coverage); Fanar r*=0.30 τ 0.3757 vs 0.3790 | results/indep_check/INDEP_COMPARISON.md |  | "see INDEP_COMPARISON.md" | **report-sourced** |
 | L1-01 | §3.2 / T2 | IFM filter changes every endpoint by at most 1.5 pp (1.45, ALLaM–SYR ΔP1) in all 20 cells | results/validity/L1_ifm_filter.csv | 1.45 | 1.45 | **PASS** |
-| L2-01 | §3.2 / T2 | most-similar tercile retains ≥2/3 of the full-sample ΔP1 for MAG, SYR, EGY in 3/4 models; KSA/UAE in ≤1/4 | results/validity/L2_fidelity.csv | [3, 3, 3, 1, 1] | [3, 3, 3, 1, 1] | **PASS** |
+| L2-01 | §3.2 / T2 | Most-similar tercile retains >=2/3 of full P1 gap: MAG 2 or 3 of 4 (row-order sensitive), SYR/EGY 3 of 4, KSA/UAE at most 1. | results/validity/L2_fidelity.csv | True | true | **PASS** |
 | L4-01 | §3.2 / T2 | AraDiCE: accuracy drops 3.6–7.0 pp | results/validity/L4_aradice.csv | [3.6, 7.0] | [3.6, 7.0] | **PASS** |
 | L4-02 | §3.2 / T2 | AraDiCE ΔP1: EGY −11 to −17 pp; LEV −6 to −14 pp | results/validity/L4_aradice.csv | [[-17.0, -11.0], [-14.0, -6.0]] | [[-17, -11], [-14, -6]] | **PASS** |
 | L4-03 | §3.2 / T2 | AraDiCE Δcov under MSA q̂: −3 to −7 pp; set size ×1.02–1.28 | results/validity/L4_aradice.csv | [[-7.0, -3.0], [1.02, 1.28]] | [[-7, -3], [1.02, 1.28]] | **PASS** |
@@ -91,7 +91,6 @@ frozen result files; it is not an independent re-computation (that is Appendix C
 | S2-02 | §3.1 / T1 | MAG mean set size 1.36/1.17/1.14/1.44 (msa_only) → 1.53/1.54/1.56/1.72 (oracle) | results/confirm/S2_variety_aware.csv | [[1.36, 1.17, 1.14, 1.44], [1.53, 1.54, 1.56, 1.72]] | [[1.36, 1.17, 1.14, 1.44], [1.53, 1.54, 1.56, 1.72]] | **PASS** |
 | S2-03 | §3.1 / T1 | text classifier recovers 51/69/81/88% of the oracle gain (MAG) | results/confirm/S2_variety_aware.csv | [51.0, 68.0, 81.0, 88.0] | [51, 69, 81, 88] | **PASS** |
 | S2-04 | §3.1 / T1 | ALLaM–MAG stays below target with the true label (0.657) | results/confirm/S2_variety_aware.csv | 0.657 | 0.657 | **PASS** |
-| S2-05 | §3.1 / T3 | ALLaM–MAG own-threshold coverage resampling range 0.63–0.70 (exploratory) | results/confirm/CONFIRM_SUMMARY.md |  | [0.63, 0.7] | **report-sourced** |
 | S4-01 | Abstract/§3.1 / T1b | MSA answered fraction 0.52/0.56/0.59/0.47 at r*=0.20 | results/confirm/S4_operational_selective.csv | [0.52, 0.56, 0.59, 0.47] | [0.52, 0.56, 0.59, 0.47] | **PASS** |
 | S4-02 | §3.1 / T1b | MSA realised risk 0.21/0.19/0.20/0.18 | results/confirm/S4_operational_selective.csv | [0.21, 0.19, 0.2, 0.18] | [0.21, 0.19, 0.2, 0.18] | **PASS** |
 | S4-03-EGY | §3.1 table / T1b | Δ answered vs MSA, EGY: [-0.04, -0.08, -0.06, -0.07] | results/confirm/S4_operational_selective.csv | [-0.04, -0.08, -0.06, -0.07] | [-0.04, -0.08, -0.06, -0.07] | **PASS** |

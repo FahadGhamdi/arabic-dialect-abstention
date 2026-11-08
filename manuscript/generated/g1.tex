@@ -2,9 +2,9 @@
 \begingroup
 \setstretch{1}\small\setlength{\tabcolsep}{3pt}
 \setlength{\LTleft}{0pt plus 1fill}\setlength{\LTright}{0pt plus 1fill}\setlength{\LTcapwidth}{\linewidth}
-\setlength{\LTpre}{8pt}\setlength{\LTpost}{8pt}
+\setlength{\LTpre}{0pt}\setlength{\LTpost}{8pt}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{\dimexpr 0.1338613\linewidth-1.7142857\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.0866109\linewidth-1.7142857\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.2913429\linewidth-1.7142857\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.1102411\linewidth-1.7142857\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.1259813\linewidth-1.7142857\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.1259813\linewidth-1.7142857\tabcolsep\relax}>{\raggedright\arraybackslash}p{\dimexpr 0.1259813\linewidth-1.7142857\tabcolsep\relax}@{}}
-\caption{G1: agreement among extractable generated answers, unextractable fraction (Unext.), accepted fraction and selective risks. All cells use 500 robustness keys. Acceptance uses re-scored original-order confidence and the original MSA threshold. Equal risks need not imply identical answers.}\label{tab:g1}\\
+\caption{G1 on 500 keys per variety. Agreement excludes unextractable answers (Unext.). Acceptance uses original-order re-scoring and the original MSA threshold.}\label{tab:g1}\\
 \toprule
 Model & Var. & Agreement [CI] & Unext. & Accepted fraction & Logit risk & Gen. risk \\
 \midrule
@@ -17,7 +17,7 @@ Model & Var. & Agreement [CI] & Unext. & Accepted fraction & Logit risk & Gen. r
 \midrule\endfoot
 \bottomrule\endlastfoot
 ALLaM & MSA & $0.982\;[0.970,\,0.992]$ & $0.000$ & $0.518$ & $0.201$ & $0.201$ \\*
-ALLaM & MAG & $0.982\;[0.970,\,0.992]$ & $0.002$ & $0.418$ & $0.249$ & $0.249$ \\
+ALLaM & MAG & $0.982\;[0.970,\,0.992]$ & $0.002$ & $0.418$ & $0.249$ & $0.249$ \\*
 ALLaM & SYR & $0.974\;[0.958,\,0.988]$ & $0.000$ & $0.496$ & $0.294$ & $0.294$ \\
 ALLaM & EGY & $0.982\;[0.970,\,0.992]$ & $0.000$ & $0.506$ & $0.237$ & $0.237$ \\
 ALLaM & KSA & $0.996\;[0.990,\,1.000]$ & $0.000$ & $0.454$ & $0.229$ & $0.229$ \\
