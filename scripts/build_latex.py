@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the MDPI LaTeX version of the manuscript from paper/manuscript_v0.4.md.
+"""Build the MDPI LaTeX version of the manuscript from paper/manuscript_v0.5.md.
 
 - front matter (title, featured application, abstract, keywords) and back matter are read from the markdown;
 - the body (sections 1–6) is converted by pandoc with natbib citations, then patched (\\cite, figure widths, tables);
@@ -10,7 +10,7 @@ Usage: python3 scripts/build_latex.py [--no-compile]
 import os, re, subprocess, shutil, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SRC = os.path.join(ROOT, 'paper', 'manuscript_v0.4.md')
+SRC = os.path.join(ROOT, 'paper', 'manuscript_v0.5.md')
 TEX = os.path.join(ROOT, 'paper', 'latex')
 os.makedirs(os.path.join(TEX, 'Definitions'), exist_ok=True)
 os.makedirs(os.path.join(TEX, 'figures'), exist_ok=True)
@@ -100,7 +100,7 @@ for k, v in rep.items():
     ai_tex = ai_tex.replace(k, v)
     back_tex = {kk: vv.replace(k, v) for kk, vv in back_tex.items()}
 
-main = r"""%% Built by scripts/build_latex.py from paper/manuscript_v0.4.md — do not edit by hand.
+main = r"""%% Built by scripts/build_latex.py from paper/manuscript_v0.5.md — do not edit by hand.
 \documentclass[applsci,article,submit,pdftex,oneauthor]{Definitions/mdpi}
 \usepackage{longtable,booktabs,array,calc,etoolbox,placeins}
 \makeatletter
@@ -120,11 +120,12 @@ main = r"""%% Built by scripts/build_latex.py from paper/manuscript_v0.4.md — 
 
 \Title{TITLE}
 \TitleCitation{TITLE}
-\Author{Fahad AlGhamdi $^{1,*}$}
+\newcommand{\orcidauthorA}{0000-0002-4161-2658}
+\Author{Fahad AlGhamdi $^{1,*}$\orcidA{}}
 \AuthorNames{Fahad AlGhamdi}
 \AuthorCitation{AlGhamdi, F.}
-\address{$^{1}$ \quad Al-Baha University, Al-Baha, Saudi Arabia; [e-mail to be added]}
-\corres{Correspondence: [e-mail to be added]}
+\address{$^{1}$ \quad Computer Science Department, Al-Baha University, Albaha 65779, Saudi Arabia; fghamdi@bu.edu.sa}
+\corres{Correspondence: fghamdi@bu.edu.sa}
 
 \featuredapplication{FEAT}
 \abstract{ABSTRACT}
@@ -136,7 +137,7 @@ BODY
 
 \vspace{6pt}
 \supplementary{SUPP}
-\authorcontributions{AUTHC}
+AUTHCLINE
 \funding{FUNDING}
 \institutionalreview{IRB}
 \informedconsent{CONSENT}
@@ -158,7 +159,8 @@ APPX
 \end{document}
 """
 main = main.replace('TITLE', title).replace('FEAT', feat).replace('ABSTRACT', abstract).replace('KEYWORDS', keywords).replace('BODY', body_tex)
-main = main.replace('SUPP', back_tex['Supplementary Materials']).replace('AUTHC', back_tex['Author Contributions']).replace('FUNDING', back_tex['Funding'])
+authc = back_tex['Author Contributions']
+main = main.replace('SUPP', back_tex['Supplementary Materials']).replace('AUTHCLINE', ('\\authorcontributions{' + authc + '}') if authc else '').replace('FUNDING', back_tex['Funding'])
 main = main.replace('IRB', back_tex['Institutional Review Board Statement']).replace('CONSENT', back_tex['Informed Consent Statement'])
 main = main.replace('DATA', back_tex['Data Availability Statement']).replace('AIUSE', ai_tex).replace('ACK', back_tex['Acknowledgments']).replace('COI', back_tex['Conflicts of Interest'])
 main = main.replace('APPX', appx_tex)

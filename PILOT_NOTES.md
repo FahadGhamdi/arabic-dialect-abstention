@@ -322,3 +322,42 @@ Keep: "cost of maintaining equal reliability under dialect shift" (A1/A2) + inst
   the references. Result: 22 pages, no half-empty pages, one 14.7 pt overfull line in §2.
 - Audits after the change: 528 numbers in the body and captions, all covered; ledger PASS 95; cite keys 68/68.
 - Review doc (Claude Docs, "Manuscript v0.4 — review draft") updated in place: Table 1, the six edited sentences, the appendices.
+
+### 2026-11-08 (09:10 local) — commit to the Mac
+- commit_2026-11-08_v04.zip (sha256 5e68ae89…9de92) staged under _staged/ and unpacked into the project: 58 files verified against
+  _staged/MANIFEST_commit_2026-11-08_v04.txt (PILOT_NOTES.md and results/audit/AUDIT_RESULTS.md written in place, since the bridge forbids deletion;
+  the latter is the 2026-11-07 wording revision that had not reached the Mac). Frozen analysis scripts untouched (hashes identical on both sides).
+
+### 2026-11-08 (09:50–10:05 local) — public repository, author block
+- Public repository created and pushed: https://github.com/FahadGhamdi/arabic-dialect-abstention, commit 90a717c (191 files = the release
+  package without paper/; MIT for scripts/, CC BY 4.0 for the rest; CITATION.cff with ORCID). The manuscript folder is held back until
+  the arXiv decision. The Claude GitHub app was installed for this one repository only. Next: tag + Zenodo DOI at submission.
+- Author block entered (F. AlGhamdi, Computer Science Department, Al-Baha University, Albaha 65779; fghamdi@bu.edu.sa; ORCID
+  0000-0002-4161-2658); Funding "no external funding"; Author Contributions omitted (single author, as in the author's Electronics
+  paper); Data Availability and Supplementary Materials point to the repository with the commit pinned and an "accessed on" date.
+  PDF 22 pages; Overleaf zip refreshed; review doc updated.
+
+### 2026-11-08 (10:20–11:30 local) — external review of v0.4 (Codex session; package "v0.5/v0.6") checked and applied → manuscript v0.5
+Checked against the frozen scripts and result files before anything was taken over:
+- CONFIRMED and applied: the d_answerable / d_answered / d_cov columns written by confirm_analyze.py are means of the bootstrap replicates
+  (np.mean(da) etc.), not sample differences. S4 and P2 agree to 3 dp either way (max |Δ| 0.0006 / 0.0005); P1 differs by up to 0.014
+  (Gemma–UAE −0.064 sample vs −0.078 bootstrap mean). The reviewer's 28 sample points equal my recomputation exactly. From v0.5 the
+  point estimates are the sample differences: ledger rows P1-03/05/06, S4-03, P2-01/02/03, L2-01 re-expressed with a plug() helper in
+  check_ledger.py; rows P1-08, COR-01..03 added; make_appendix_tables.py and make_figures.py (Figure 3, Figure A1) switched; six P1
+  values change at 2 dp; intervals, counts and conclusions unchanged. No result file touched. Ledger: PASS 99.
+- CONFIRMED and applied: development seed is 0 (scripts/s3_score.py SEED=0); 20261104 and 20261106 are the screen's sample seeds;
+  three demonstration keys explain 3,135 − 500 − 3 = 2,632; scoring details (letter-ID aggregation, bf16/MPS, left padding, 2,048 max
+  length, prompts sorted by length, no pinned revisions) now stated in §3.3; the screen's 0.37 is the composite basic flag (Q1 or Q2 = no),
+  Q2 "unsure" on 29%; L4 size ratios have no intervals; confirm_analyze sorts with the default (unstable) sort — RELEASE_NOTES §3 corrected,
+  §12 added; the timing record now says "before the confirmatory analysis", with plan v1/code v1 at ≈21:30 after scoring began at 20:57
+  (Table 1 wording, §3.5, Appendix A Table A7); "our shift is milder than Kamath's" removed (no common scale); DAMM entry gets its DOI.
+- RESOLVED differently from the reviewer: the Addendum 4 header time (≈23:50) is a clock error — the log places the writing at 03:00–03:30
+  on 7 Nov and the execution note at 05:45; stated so in Appendix A and in an erratum appended to ANALYSIS_PLAN.md (header left as written).
+- NOT adopted: the reviewer's prose (hedge-heavy, defensive) — substance taken, text kept in the manuscript's own voice; the compact
+  16 mm-margin layout over the MDPI class (journal geometry must not be altered; our build already fills pages with floating tables and
+  figures); the external "reporting amendment" layer (the correction lives in the pipeline: ledger, generators, notes); the title
+  "Risk and Coverage across Arabic Dialects in Selective Question Answering" left for the author to decide (the reviewer says the author
+  chose it); the 21 extra appendix tables — useful, to be generated from the result files by make_appendix_tables.py in the next pass
+  rather than copied.
+- Disclosure (§3.7) now names Claude Fable 5.1 (claude-fable-5-1) via Claude Code for 4–8 Nov sessions, GPT-6 Astra for review sessions
+  (version per session not recorded) and the Codex-run review that found the estimator issue.

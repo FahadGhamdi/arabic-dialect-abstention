@@ -1,6 +1,6 @@
 # Ledger consistency audit
 
-Rows: 104 — PASS 95, FAIL/ERROR 0, report-sourced (not recomputed) 9.
+Rows: 108 — PASS 99, FAIL/ERROR 0, report-sourced (not recomputed) 9.
 
 A consistency audit compares the manuscript's numbers and their stated comparison/denominator/interval type with the
 frozen result files; it is not an independent re-computation (that is Appendix C / results/indep_check).
@@ -26,6 +26,9 @@ frozen result files; it is not an independent re-computation (that is Appendix C
 | AUD-05 | §3.2 / App. E / T2 | 1,600 pair×model observations; Δacc −4.5 (unflagged) vs −6.2 (flagged); difference −1.8 [−8.6, +4.6]; answer change 26.9% vs 27.7% | results/audit/AUDIT_RESULTS.md |  | "\u22121.8 [\u22128.6,+4.6]" | **report-sourced** |
 | AUD-06 | §3.2 / App. E / T2 | after excluding flagged pairs (80 keys) operational answered fraction −6 to −20 pp; MAG per-model ΔP1 CIs ≈ ±40 pp | results/audit/AUDIT_RESULTS.md |  | "\u22126.7\u2026\u221220.2" | **report-sourced** |
 | AUD-07 | §3.2 / App. E / EXT | resource documentation reports ≈5% error from a 32-item/dialect check | results/audit/AUDIT_RESULTS.md |  | "5%" | **report-sourced** |
+| COR-01 | Appendix C / T1 | largest P1 estimator difference: Gemma–UAE −0.064 (sample difference) vs −0.078 (bootstrap mean) | results/confirm/P1_selective.csv | [-0.064, -0.078] | [-0.064, -0.078] | **PASS** |
+| COR-02 | Appendix C / §2.5 / T1 | six P1 differences changed at the second decimal under the correction | results/confirm/P1_selective.csv | 6 | 6 | **PASS** |
+| COR-03 | Appendix C / T1 | S4 and P2 contrasts agree to the third decimal between the two estimators | results/confirm/S4_operational_selective.csv | 0.001 | 0.001 | **PASS** |
 | D01 | §2 Methods / DSN | 3,135 DAMM questions (keys) | data/damm.csv | 3135 | 3135 | **PASS** |
 | D02 | §2 Methods / DSN | development sample 500 keys | data/pilot_keys.json | 500 | 500 | **PASS** |
 | D03 | §2 Methods / DSN | router 404 / calibration 808 / test 1,420 keys; seed 20261105 | data/confirmatory_splits.json | [404, 808, 1420, 20261105] | [404, 808, 1420, 20261105] | **PASS** |
@@ -50,11 +53,12 @@ frozen result files; it is not an independent re-computation (that is Appendix C
 | L4-04 | §3.2 / T2 | AraDiCE: all intervals (Δacc, ΔP1, Δcov, Δanswered) exclude 0 | results/validity/L4_aradice.csv | 32 | 32 | **PASS** |
 | P1-01 | §3.1 / T1 | MSA matched risk t50 per model | results/confirm/P1_selective.csv | [0.203, 0.149, 0.156, 0.194] | [0.203, 0.149, 0.156, 0.194] | **PASS** |
 | P1-02 | Abstract/§3.1 / T1 | MAG answerable 0.26/0.29/0.23/0.32 | results/confirm/P1_selective.csv | [0.26, 0.29, 0.23, 0.32] | [0.26, 0.29, 0.23, 0.32] | **PASS** |
-| P1-03 | §3.1 / T1 | MAG Δ −0.24 [−.31,−.17] / −0.20 [−.28,−.14] / −0.27 [−.32,−.21] / −0.18 [−.24,−.13] | results/confirm/P1_selective.csv | [-0.24, -0.31, -0.17, -0.2, -0.28, -0.14, -0.27, -0.32, -0.21, -0.18, -0.24, -0.13] | [-0.24, -0.31, -0.17, -0.2, -0.28, -0.14, -0.27, -0.32, -0.21, -0.18, -0.24, -0.13] | **PASS** |
+| P1-03 | §3.1 / Table A1 / T1 | MAG Δ −0.24 [−.31,−.17] / −0.21 [−.28,−.14] / −0.27 [−.32,−.21] / −0.18 [−.24,−.13] | results/confirm/P1_selective.csv | [-0.24, -0.31, -0.17, -0.21, -0.28, -0.14, -0.27, -0.32, -0.21, -0.18, -0.24, -0.13] | [-0.24, -0.31, -0.17, -0.21, -0.28, -0.14, -0.27, -0.32, -0.21, -0.18, -0.24, -0.13] | **PASS** |
 | P1-04 | Abstract/§3.1 / T1 | MAG and SYR answerable on a quarter to a third (0.23–0.34) | results/confirm/P1_selective.csv | [0.23, 0.34] | [0.23, 0.34] | **PASS** |
-| P1-05 | §3.1 / T1 | SYR answerable 0.31–0.34; Δ −0.17 to −0.19 | results/confirm/P1_selective.csv | [[0.31, 0.34], [-0.19, -0.17]] | [[0.31, 0.34], [-0.19, -0.17]] | **PASS** |
-| P1-06 | §3.1 / T1 | EGY 0.35–0.41 (Δ −0.10 to −0.15); KSA 0.37–0.44 (−0.06 to −0.13); UAE 0.42–0.44 (−0.07 to −0.08) | results/confirm/P1_selective.csv | [[0.35, 0.41], [-0.15, -0.1], [0.37, 0.44], [-0.13, -0.06], [0.42, 0.44], [-0.08, -0.07]] | [[0.35, 0.41], [-0.15, -0.1], [0.37, 0.44], [-0.13, -0.06], [0.42, 0.44], [-0.08, -0.07]] | **PASS** |
+| P1-05 | §3.1 / T1 | SYR answerable 0.31–0.34; Δ −0.16 to −0.19 | results/confirm/P1_selective.csv | [[0.31, 0.34], [-0.19, -0.16]] | [[0.31, 0.34], [-0.19, -0.16]] | **PASS** |
+| P1-06 | §3.1 / T1 | EGY 0.35–0.41 (Δ −0.09 to −0.15); KSA 0.37–0.44 (−0.06 to −0.13); UAE 0.42–0.44 (−0.06 to −0.08) | results/confirm/P1_selective.csv | [[0.35, 0.41], [-0.15, -0.09], [0.37, 0.44], [-0.13, -0.06], [0.42, 0.44], [-0.08, -0.06]] | [[0.35, 0.41], [-0.15, -0.09], [0.37, 0.44], [-0.13, -0.06], [0.42, 0.44], [-0.08, -0.06]] | **PASS** |
 | P1-07 | §3.1 / T1 | all 20 P1 intervals exclude 0 | results/confirm/P1_selective.csv | 20 | 20 | **PASS** |
+| P1-08 | §2.6 / Table A1 / T1 | MSA P1 is ≈0.50, not exactly: 0.5007/0.5000/0.5014/0.5014 | results/confirm/P1_selective.csv | [0.5007, 0.5, 0.5014, 0.5014] | [0.5007, 0.5, 0.5014, 0.5014] | **PASS** |
 | P2-01 | Abstract/§3.1 / T1 | coverage under MSA q̂ falls 8/11/13/8 pp (MAG) at α=0.30 | results/confirm/P2_conformal.csv | [-8.0, -10.0, -13.0, -8.0] | [-8, -10, -13, -8] | **PASS** |
 | P2-02 | §3.1 / T1 | coverage falls 6/8/6/9 pp (SYR); other dialects 3–5 pp | results/confirm/P2_conformal.csv | [[-6.0, -8.0, -6.0, -9.0], [-5.0, -3.0]] | [[-6, -8, -6, -9], [-5, -3]] | **PASS** |
 | P2-03 | Abstract/§3.1 / T1 | MAG+SYR coverage loss range 6–13 pp | results/confirm/P2_conformal.csv | [6.0, 13.0] | [6, 13] | **PASS** |

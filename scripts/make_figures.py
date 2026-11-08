@@ -172,7 +172,8 @@ def fig3():
             ax = axes[i, j]; style(ax)
             ax.axvline(ref, color='#52514e', lw=0.8, ls='--', zorder=1)
             for yy, v in zip(y, DIAL):
-                val = a.loc[v, key]; scale = 100 if key == 'd_cov' else 1
+                # point estimate: plug-in difference (the released d_cov column is a bootstrap mean; 2026-11-08)
+                val = (a.loc[v, 'cov_msathr'] - a.loc['MSA', 'cov_msathr']) if key == 'd_cov' else a.loc[v, key]; scale = 100 if key == 'd_cov' else 1
                 ax.plot([b.loc[v, rlo] * scale, b.loc[v, rhi] * scale], [yy, yy], color=COL[v], lw=0.9, alpha=0.9, zorder=2)
                 ax.plot([a.loc[v, lo] * scale, a.loc[v, hi] * scale], [yy, yy], color=COL[v], lw=3.2, solid_capstyle='butt', zorder=3)
                 ax.plot(val * scale, yy, marker='o', ms=3.2, mfc='white', mec=COL[v], mew=0.9, ls='none', zorder=4)
@@ -204,9 +205,9 @@ def figp1():
         for yy, v in zip(y, DIAL):
             r = d.loc[v]
             ax.plot([r.d_lo, r.d_hi], [yy + off[k]] * 2, color=COL[v], lw=1.0, alpha=0.9)
-            ax.plot(r.d_answerable, yy + off[k], marker=mm[m], ms=3.6, mfc='white', mec=COL[v], mew=0.9, ls='none')
+            ax.plot(r.answerable - d.loc['MSA', 'answerable'], yy + off[k], marker=mm[m], ms=3.6, mfc='white', mec=COL[v], mew=0.9, ls='none')   # plug-in difference
     ax.set_yticks(y); ax.set_yticklabels(DIAL)
-    ax.set_xlabel('answerable fraction at the MSA-matched risk: dialect − MSA (MSA = 0.50)')
+    ax.set_xlabel('answerable fraction at the MSA-matched risk: dialect − MSA (MSA ≈ 0.50)')
     handles = [Line2D([], [], marker=mm[m], mfc='white', mec=TXT2, ls='none', label=MNAME[m]) for m in M]
     ax.legend(handles=handles, frameon=False, loc='upper center', ncol=2, handletextpad=0.3, bbox_to_anchor=(0.5, -0.28), columnspacing=1.0)
     fig.tight_layout()

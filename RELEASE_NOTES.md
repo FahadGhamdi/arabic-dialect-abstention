@@ -10,8 +10,10 @@
 2. **Merging of letter variants.** Each option letter's probability is the sum of the probabilities of its with-space and without-space
    token variants, i.e. a log-sum-exp of the two log-probabilities, then renormalised over the four letters.
 
-3. **Tie rule.** Items are sorted by confidence in descending order with a stable sort; the S4 threshold is the confidence of the K-th
-   item, K being the largest prefix length whose empirical risk is ≤ the target. No tie sits at the ⌈n/2⌉ or K-th position in the
+3. **Tie rule.** Items are sorted by confidence in descending order with NumPy's default sort, which is not stable (only the AUGRC
+   diagnostic requests a stable sort; an earlier version of this note said "stable" for all sorts, which was too broad); the S4 threshold
+   is the confidence of the K-th item, K being the largest prefix length whose empirical risk is ≤ the target, and every item whose
+   confidence is ≥ that threshold is accepted, so a tie at the threshold is accepted whichever side of the sort it falls on. No tie sits at the ⌈n/2⌉ or K-th position in the
    confirmatory files except Qwen3-8B-Base at target 0.15, where τ depends on the order within a mixed tie group (0.6148 vs 0.6147; one item).
 
 4. **Re-scoring differences.** Re-scoring the original option order on the 500 robustness keys reproduced the confirmatory prediction in
@@ -45,3 +47,10 @@
     table byte for byte. Three files moved by tie-order effects under a different pandas/numpy build: the L2 terciles (one item per cell,
     `rank(method="first")` after a merge), the AraDiCE ΔP1 point values (≤ 0.003; tied `p_max` under a non-stable sort) and one rotation's ΔP1
     in R2 (≤ 0.006). No reported number changed at its reported precision; the ledger audit passes on both versions.
+
+12. **Point estimates of the paired contrasts (correction, 8 November 2026).** In `results/confirm/P1_selective.csv`, `S4_operational_selective.csv`
+    and `P2_conformal.csv` the columns `d_answerable`, `d_answered` and `d_cov` are the means of the bootstrap replicates, not the sample
+    differences; the interval columns are percentile intervals and are unaffected. The manuscript, the claims ledger, the appendix tables and
+    Figures 3 and A1 now use the sample differences (e.g. `answerable(v) − answerable(MSA)`), which agree with the independent implementation.
+    S4 and P2 are unchanged at the reported precision; six P1 differences changed at the second decimal (largest: Gemma–UAE −0.064 instead of
+    −0.078). The result files are left as produced by the frozen code.

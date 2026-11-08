@@ -429,3 +429,11 @@ the paired difference and a key-bootstrap CI (B = 2000, default_rng(0)); also th
 interval includes 0 (or is small relative to the dialect gaps), the S4 statements carry over to the generated answers on this prompt; if not,
 S4 is stated for the letter-logit policy only. Code: scripts/supp_analyze.py, frozen (sha256 below) before execution.
 Freeze line (Addendum 10): scripts/supp_analyze.py sha256 = 9d737d2020db161b62da7c3b531af045cd20ef599173871abbf1ceca545f5492, frozen 2026-11-08 ~01:35 local before execution.
+
+## Erratum (dated 2026-11-08, ~11:00 local; no rule or analysis changed)
+- The header of Addendum 4 reads "dated 2026-11-07, ~23:50 local". The project log (PILOT_NOTES_addendum_2026-11-05_07.md, "Pivot to
+  automatic validity layers (2026-11-07, 03:00–03:30 local)") and Addendum 5 (execution note, 05:45 the same morning) place its writing
+  at 03:00–03:30 on 7 November; "~23:50" is a clock error. The header is left as written; this note is the correction.
+- The released confirmatory result files store the mean of the bootstrap differences in the columns d_answerable, d_answered and d_cov.
+  From manuscript v0.5 the point estimates of these contrasts are the sample differences (e.g. answerable(v) − answerable(MSA)); the
+  percentile intervals are unchanged. Found in the external review of draft v0.4; see Appendix C of the manuscript and RELEASE_NOTES §12.

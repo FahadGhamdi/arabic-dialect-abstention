@@ -11,6 +11,7 @@ Row columns:
 `filter`: "col=value; col=value" (numeric values parsed as float; "col in a|b|c" for sets).
 `expr`  : Python expression over `df` (filtered frame; `D` = full frame; `J` = json object for .json files).
           Helpers: M (model order), pick(df,col) -> values in M order; rng(df,col,nd) -> [min,max] rounded;
+          plug(D,col,v,extra) -> plug-in col(v)−col(MSA) per model; plugall(D,col,extra,vs) -> over varieties;
           cnt(mask) -> int; rd(x,nd) -> rounded scalar/list; pp(x) -> 100*x.
 `claimed`: JSON scalar or list. `tol`: absolute tolerance (per element). Empty expr => "report-sourced" row
           (value transcribed from a named report table; not recomputed here).
@@ -36,6 +37,26 @@ def rng(df, col, nd=2):
 
 def cnt(mask):
     return int(np.asarray(mask).sum())
+
+
+def plug(D, col, v, extra=None):
+    """Plug-in paired difference col(v) − col(MSA) per model (M order) on the FULL frame D, optionally restricted by a
+    dict of column=value conditions (e.g. {'target_risk': 0.2}). This is the sample point estimate; the released
+    d_* columns of confirm_analyze.py are bootstrap means and are no longer used as point estimates (2026-11-08)."""
+    d = D
+    for k, val in (extra or {}).items():
+        d = d[np.isclose(d[k], val)] if isinstance(val, (int, float)) else d[d[k] == val]
+    out = []
+    for m in M:
+        a = d[(d.model == m) & (d.variety == v)][col].iloc[0]
+        b = d[(d.model == m) & (d.variety == 'MSA')][col].iloc[0]
+        out.append(float(a - b))
+    return out
+
+
+def plugall(D, col, extra=None, vs=None):
+    """plug() over several varieties, flattened per variety in M order."""
+    return [x for v in (vs or DIAL) for x in plug(D, col, v, extra)]
 
 
 def rd(x, nd=2):
@@ -124,14 +145,14 @@ def main():
                     else:
                         cache[f] = pd.read_csv(path)
                 src = cache[f]
-                env = dict(M=M, DIAL=DIAL, pick=pick, rng=rng, cnt=cnt, rd=rd, pp=pp, np=np, pd=pd, math=math)
+                env = dict(M=M, DIAL=DIAL, pick=pick, rng=rng, cnt=cnt, rd=rd, pp=pp, plug=plug, plugall=plugall, np=np, pd=pd, math=math)
                 if isinstance(src, pd.DataFrame):
                     D = src
                     df = apply_filter(D, parse_filter(r['filter'])) if r['filter'].strip() else D
                     env.update(df=df, D=D)
                 else:
                     env.update(J=src)
-                val = eval(expr, {'__builtins__': __builtins__}, env)
+                val = eval(expr, {**env, '__builtins__': __builtins__})   # helpers as globals so that nested comprehensions see them
                 if isinstance(val, (np.floating, np.integer)):
                     val = val.item()
                 if isinstance(val, (list, tuple)):

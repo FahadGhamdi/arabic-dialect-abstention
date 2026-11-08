@@ -1,4 +1,4 @@
-# Frozen scripts and their sha256 (computed at release build, 2026-11-08 06:01 UTC)
+# Frozen scripts and their sha256 (computed at release build, 2026-11-08 09:49 UTC)
 
 | script | role | sha256 |
 |---|---|---|
@@ -12,9 +12,9 @@
 | scripts/sens_analyze.py | verification package (Addendum 9): double resampling, reproducibility, paired rotation comparison, distance table | 3973de301651a08a19eb5b0e968742655e0a43f36d6eb5b87439ac6ab944584b |
 | scripts/indep_check/recompute.py | independent implementation of P1/S4/P2 from docs/METRIC_DEFINITIONS.md (Addendum 9 §9.5) | 4d69b8f21f6e2d07993dc75b00207004c34509a6eba670aace79142cddeecdd0 |
 | scripts/supp_analyze.py | supplements (Addendum 10): risk differences and exceedance; generated-answer selective risk | 9d737d2020db161b62da7c3b531af045cd20ef599173871abbf1ceca545f5492 |
-| scripts/make_figures.py | figures from the result files (no estimates) | 9ecdf8c24b4c7311ef7c96d711afb2fbd68d420bd24171284d8fb8e3ea6f9af2 |
-| scripts/build_ledger.py | authoring source of docs/CLAIMS_LEDGER.csv | a9661cacc23fc4d08ec9d61a66213a99a4c2d28944914618f5ab439746c1c112 |
-| scripts/check_ledger.py | consistency audit of the ledger against the result files | 177254764a004388a003633e5c73abcabe444713c6dc81862b0beabb989a43d3 |
+| scripts/make_figures.py | figures from the result files (no estimates) | 09cd071dc30e1e1cfd89dcf2a4f91d9cd6088a828389360d6f4bb96ac3f12b26 |
+| scripts/build_ledger.py | authoring source of docs/CLAIMS_LEDGER.csv | 983fd4b35ec7cdb2474dd7535025f0a9f725e152e6ae55905a25d4bcf70f20b1 |
+| scripts/check_ledger.py | consistency audit of the ledger against the result files | d1acdbc532a19ef348a303b3b6dda0b46b30c6b84f42b4120609257a2cf6ce9d |
 | scripts/s9_score_confirm.py | confirmatory scoring of the four models (prompt, letter log-probabilities) | 44dbf0046c9c55d3850cba7ff4fd80875d3ec761dd3144211c7315e08acd78bf |
 | scripts/s11_aradice_score.py | AraDiCE scoring | 6040a71e2efce0f0d7aa6bdf5062625226bc5b860647c5fe7cba95d1a79af04a |
 | scripts/s10_fidelity.py | embedding similarity (multilingual-e5-large) for L2 | e62cb507e6f2330b3558b7b8263903f7fc746485f5f94a8be9f1f00dfe8d65c7 |

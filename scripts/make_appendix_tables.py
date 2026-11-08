@@ -10,7 +10,7 @@ import os, re, sys
 import pandas as pd
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MD = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, 'paper', 'manuscript_v0.4.md')
+MD = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, 'paper', 'manuscript_v0.5.md')
 M = ['ALLaM-7B-Instruct-preview', 'Fanar-1-9B', 'Qwen3-8B-Base', 'gemma-2-9b']
 MS = ['ALLaM', 'Fanar', 'Qwen3', 'Gemma']
 V = ['MAG', 'SYR', 'EGY', 'KSA', 'UAE']
@@ -55,11 +55,11 @@ tables = {}
 
 # ---- A1: P1 answerable fraction at the MSA-matched risk
 p1 = pd.read_csv(os.path.join(ROOT, 'results/confirm/P1_selective.csv')).set_index(['model', 'variety'])
-rows = [['MSA (reference)'] + [f2(p1.loc[(m, 'MSA'), 'answerable']) for m in M],
+rows = [['MSA (reference)'] + [f'{p1.loc[(m, "MSA"), "answerable"]:.4f}' for m in M],
         ['MSA risk at 50% answered (t)'] + [f3(p1.loc[(m, 'MSA'), 'msa_matched_risk']) for m in M]]
 for v in V:
-    rows.append([VN[v]] + [f"{f2(p1.loc[(m, v), 'answerable'])} ({sgn2(p1.loc[(m, v), 'd_answerable'])} [{f2(p1.loc[(m, v), 'd_lo'])}, {f2(p1.loc[(m, v), 'd_hi'])}])" for m in M])
-tables['A1'] = ('P1: fraction of test questions answerable at the risk MSA attains when answering its 50% most confident questions (t), by variety and model; in parentheses the paired difference from MSA with its 95% key-bootstrap interval. Oracle threshold; descriptive.',
+    rows.append([VN[v]] + [f"{f2(p1.loc[(m, v), 'answerable'])} ({sgn2(p1.loc[(m, v), 'answerable'] - p1.loc[(m, 'MSA'), 'answerable'])} [{f2(p1.loc[(m, v), 'd_lo'])}, {f2(p1.loc[(m, v), 'd_hi'])}])" for m in M])   # plug-in difference
+tables['A1'] = ('P1: fraction of test questions answerable at the risk MSA attains when answering its 50% most confident questions (t), by variety and model; in parentheses the difference from the MSA fraction (plug-in point estimate) with its 95% paired key-bootstrap percentile interval. MSA\'s own fraction is the largest prefix at or below 50% and is therefore approximately, not exactly, 0.50. Oracle threshold; descriptive.',
                 table(['variety'] + MS, rows))
 
 # ---- A2: P2 at alpha = 0.30
@@ -68,7 +68,7 @@ p2 = p2[p2.alpha == 0.3].set_index(['model', 'variety'])
 rows = [['MSA: coverage, own quantile'] + [f2(p2.loc[(m, 'MSA'), 'cov_msathr']) for m in M],
         ['MSA: mean set size'] + [f2(p2.loc[(m, 'MSA'), 'size_msathr']) for m in M]]
 for v in V:
-    rows.append([f'{v}: Δ coverage (points)'] + [f"{pts(p2.loc[(m, v), 'd_cov'])} [{pts(p2.loc[(m, v), 'd_cov_lo'])}, {pts(p2.loc[(m, v), 'd_cov_hi'])}]" for m in M])
+    rows.append([f'{v}: Δ coverage (points)'] + [f"{pts(p2.loc[(m, v), 'cov_msathr'] - p2.loc[(m, 'MSA'), 'cov_msathr'])} [{pts(p2.loc[(m, v), 'd_cov_lo'])}, {pts(p2.loc[(m, v), 'd_cov_hi'])}]" for m in M])   # plug-in difference
     rows.append([f'{v}: set-size ratio'] + [f"{f2(p2.loc[(m, v), 'size_ratio'])} [{f2(p2.loc[(m, v), 'size_ratio_lo'])}, {f2(p2.loc[(m, v), 'size_ratio_hi'])}]" for m in M])
 tables['A2'] = ('P2 at α = 0.30 (nominal coverage 0.70): coverage lost on each variety under the MSA calibration quantile (Δ coverage, percentage points, paired by key) and the mean set size each variety needs under its own quantile to reach the same nominal target, as a ratio to MSA\'s (set-size ratio); 95% intervals with the calibration sample held fixed. The double-resampled intervals are 2.7–4.3 times wider for the ratios and 0.95–1.4 times for the coverage differences (Section 4.4).',
                 table(['quantity'] + MS, rows))
