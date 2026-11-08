@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this code or these results, please cite the manuscript (preprint/journal reference to be added) and this repository."
+title: "Uneven transfer of MSA-calibrated abstention policies to Arabic dialects — code, scores and results"
+authors:
+  - family-names: AlGhamdi
+    given-names: Fahad
+    affiliation: "Computer Science Department, Al-Baha University, Albaha, Saudi Arabia"
+    orcid: "https://orcid.org/0000-0002-4161-2658"
+    email: fghamdi@bu.edu.sa
+version: "0.4"
+date-released: "2026-11-08"
+repository-code: "https://github.com/FahadGhamdi/arabic-dialect-abstention"
+license: MIT
+keywords:
+  - Arabic dialects
+  - selective prediction
+  - abstention
+  - conformal prediction
+  - calibration
+  - large language models
