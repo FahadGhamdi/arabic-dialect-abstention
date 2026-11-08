@@ -1,0 +1,156 @@
+{
+  "scope": "Internal checks on stored scores, not verification of historical inference",
+  "split_sizes": [
+    404,
+    808,
+    1420
+  ],
+  "split_and_development_disjoint": true,
+  "files": [
+    {
+      "file": "results/aradice_scores_ALLaM-7B-Instruct-preview.csv",
+      "rows": 6000,
+      "unique_records": true,
+      "correctness_identity": true,
+      "max_probability_reconstruction_error": 4.999291319029986e-06,
+      "max_argmax_probability_loss": 0.0,
+      "sha256": "e76c9d5051c3a28bb40d2e46591e6ff741db9b2fcb1413686bbefe004b8e530b"
+    },
+    {
+      "file": "results/aradice_scores_Fanar-1-9B.csv",
+      "rows": 6000,
+      "unique_records": true,
+      "correctness_identity": true,
+      "max_probability_reconstruction_error": 2.622541464003536e-05,
+      "max_argmax_probability_loss": 0.0,
+      "sha256": "71f7408bdd8c633e0dd36bd5c4c9a2ddf7fe35a43dbc257b7559d7787418628c"
+    },
+    {
+      "file": "results/aradice_scores_Qwen3-8B-Base.csv",
+      "rows": 6000,
+      "unique_records": true,
+      "correctness_identity": true,
+      "max_probability_reconstruction_error": 2.831823913346243e-05,
+      "max_argmax_probability_loss": 0.0,
+      "sha256": "11b67e9b1d797f57b61fae3cbf73f7cacfcc8b30edbc1b58365f1702fd4cd218"
+    },
+    {
+      "file": "results/aradice_scores_gemma-2-9b.csv",
+      "rows": 6000,
+      "unique_records": true,
+      "correctness_identity": true,
+      "max_probability_reconstruction_error": 2.5616481929446877e-05,
+      "max_argmax_probability_loss": 0.0,
+      "sha256": "7be6e68b2c9a0769c21328119e158719651fd8974b2e890c7d2bb629fa887b38"
+    },
+    {
+      "file": "results/confirm_scores_ALLaM-7B-Instruct-preview.csv",
+      "rows": 18424,
+      "unique_records": true,
+      "correctness_identity": true,
+      "max_probability_reconstruction_error": 4.9999237182740686e-06,
+      "max_argmax_probability_loss": 0.0,
+      "sha256": "64c70c8a13ae51e73c471209441fe977104f15135aa7d84e8e8352b430201114"
+    },
+    {
+      "file": "results/confirm_scores_Fanar-1-9B.csv",
+      "rows": 18424,
+      "unique_records": true,
+      "correctness_identity": true,
+      "max_probability_reconstruction_error": 2.9062224656928315e-05,
+      "max_argmax_probability_loss": 0.0,
+      "sha256": "3c4c0da90ab433ff798b92ab72bdc6a8639c37643ad118e0089079d9ea9a381b"
+    },
+    {
+      "file": "results/confirm_scores_Qwen3-8B-Base.csv",
+      "rows": 18424,
+      "unique_records": true,
+      "correctness_identity": true,
+      "max_probability_reconstruction_error": 2.865623601816525e-05,
+      "max_argmax_probability_loss": 0.0,
+      "sha256": "391504dddb93d1cdea546190afa465eb600ce528bd188928b63a6e6b478c88ae"
+    },
+    {
+      "file": "results/confirm_scores_gemma-2-9b.csv",
+      "rows": 18424,
+      "unique_records": true,
+      "correctness_identity": true,
+      "max_probability_reconstruction_error": 2.589331633906511e-05,
+      "max_argmax_probability_loss": 0.0,
+      "sha256": "f0ff4a0fab3faeaa8696db40d2ab61ff39471dbf369437f92771bc7707212a7f"
+    },
+    {
+      "file": "results/robust_scores_ALLaM-7B-Instruct-preview.csv",
+      "rows": 14000,
+      "unique_records": true,
+      "correctness_identity": true,
+      "max_probability_reconstruction_error": 4.99944507015293e-06,
+      "max_argmax_probability_loss": 0.0,
+      "sha256": "9693aefb1084e46ca20bdd919fcdd6666dffd12ca5a81c57fc3d0ccba9372941"
+    },
+    {
+      "file": "results/robust_scores_Fanar-1-9B.csv",
+      "rows": 14000,
+      "unique_records": true,
+      "correctness_identity": true,
+      "max_probability_reconstruction_error": 2.5175128564425275e-05,
+      "max_argmax_probability_loss": 0.0,
+      "sha256": "dfa2abc3249629eb0c817086518b4896ed01841e0bdf0038ad7b38b082cd5595"
+    },
+    {
+      "file": "results/robust_scores_Qwen3-8B-Base.csv",
+      "rows": 14000,
+      "unique_records": true,
+      "correctness_identity": true,
+      "max_probability_reconstruction_error": 2.878741853734601e-05,
+      "max_argmax_probability_loss": 0.0,
+      "sha256": "cff60ba5c85b60adb4a10c9f7a2cf23766bf58ad31e645019c8b01f32209817b"
+    },
+    {
+      "file": "results/robust_scores_gemma-2-9b.csv",
+      "rows": 14000,
+      "unique_records": true,
+      "correctness_identity": true,
+      "max_probability_reconstruction_error": 2.8222162257396377e-05,
+      "max_argmax_probability_loss": 0.0,
+      "sha256": "ba2067980d1f212ab0b61284bcaa5bab55d103f073cb210f48e7f28d903fb147"
+    },
+    {
+      "file": "results/scores_ALLaM-7B-Instruct-preview.csv",
+      "rows": 3500,
+      "unique_records": true,
+      "correctness_identity": true,
+      "max_probability_reconstruction_error": 4.999438998010142e-06,
+      "max_argmax_probability_loss": 0.0,
+      "sha256": "417cc46a12db70ead6b199ece23c9aca0c030a4181a4b90c10199710e0cb486a"
+    },
+    {
+      "file": "results/scores_Fanar-1-9B.csv",
+      "rows": 3500,
+      "unique_records": true,
+      "correctness_identity": true,
+      "max_probability_reconstruction_error": 2.7199735389227264e-05,
+      "max_argmax_probability_loss": 0.0,
+      "sha256": "ec615a3b8379c08e508760b64ebafac4825044b588faeeb93418313a91ce2004"
+    },
+    {
+      "file": "results/scores_Qwen3-8B-Base.csv",
+      "rows": 3500,
+      "unique_records": true,
+      "correctness_identity": true,
+      "max_probability_reconstruction_error": 2.5545684546379732e-05,
+      "max_argmax_probability_loss": 0.0,
+      "sha256": "21fd3b01c9f180c59c4ab015c0ddd56aff64737b3783bbb35c63113899826275"
+    },
+    {
+      "file": "results/scores_gemma-2-9b.csv",
+      "rows": 3500,
+      "unique_records": true,
+      "correctness_identity": true,
+      "max_probability_reconstruction_error": 2.4821914436923276e-05,
+      "max_argmax_probability_loss": 0.0,
+      "sha256": "95eaf721554cb2482f7c6b68be25097363a705d911f70ec0026edee6183ffb80"
+    }
+  ],
+  "total_records": 167696
+}

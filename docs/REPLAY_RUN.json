@@ -1,0 +1,41 @@
+{
+  "jobs": [
+    {
+      "script": "confirm_analyze.py",
+      "returncode": 0,
+      "seconds": 49.56
+    },
+    {
+      "script": "validity_analyze.py",
+      "returncode": 0,
+      "seconds": 8.78
+    },
+    {
+      "script": "diag_analyze.py",
+      "returncode": 0,
+      "seconds": 13.5
+    },
+    {
+      "script": "robust_analyze.py",
+      "returncode": 0,
+      "seconds": 14.52
+    },
+    {
+      "script": "sens_analyze.py",
+      "returncode": 0,
+      "seconds": 4.63
+    },
+    {
+      "script": "supp_analyze.py",
+      "returncode": 0,
+      "seconds": 3.53
+    },
+    {
+      "script": "indep_check/recompute.py",
+      "returncode": 0,
+      "seconds": 0.87
+    }
+  ],
+  "plots_regenerated": false,
+  "model_inference": false
+}

@@ -1,0 +1,4 @@
+# Plotting dependencies; not installed or freshly exercised in this audit.
+-r requirements-analysis.txt
+matplotlib>=3.9
+tabulate>=0.9

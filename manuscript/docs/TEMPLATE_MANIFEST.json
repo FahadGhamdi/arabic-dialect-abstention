@@ -1,0 +1,16 @@
+{
+  "archive": "/Users/fahad/Downloads/MDPI_template_ACS.zip",
+  "sha256": "c275e04bfeb47c017f820f55e9ab8c1ebd4066d0868dc8c25e4fa7ed7aa15754",
+  "Definitions": {
+    "logo-orcid.pdf": "0558a0097dc4d1ffe3f4a1b3c9b4b98c6e568eac7d7439d447ca56ed1a8ec759",
+    "mdpi_apacite.bst": "ed0673fa74dd08882f004e9690b1371138d4c87445f4983e386d1d9d239a9c21",
+    "unicode.tex": "e870acdcc8b88938d6426d54aadb504c4e921185a2c202503f8b697a86c4b902",
+    "mdpi.cls": "36d0ae0fe93576bcaa4efc21718488558a4a1329696d6a1fe6083082144e6ad2",
+    "logo-mdpi.eps": "f02d31469c6b2666c9de2da8d8731773bce3751d2fa99a27ff4bcf61a106cdcf",
+    "logo-updates.eps": "71ad8b00bcca718b62f3286af02ea56678e8199b5843d7ed4fdc86bd969c2809",
+    "mdpi_apacite.sty": "d17559301e6d232bed2f301f0316164df86ba38ac8c637840ba3f8a52cf05700",
+    "journalnames.tex": "ef3172c0400960812c0c9d1e84d25a56781952f7a4bb68f9636a25ab70c74f0f",
+    "mdpi.bst": "80620f2bf33ceb4e19187f1ba34896bd0a1f41efec792f7e53ca994694d2e562",
+    "mdpi_chicago.bst": "f49fab045df47412e898b622917263c6850942bef3176adbe4c1550c9e499047"
+  }
+}

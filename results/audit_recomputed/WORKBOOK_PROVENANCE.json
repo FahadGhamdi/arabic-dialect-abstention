@@ -1,0 +1,6 @@
+{
+  "sha256": "efd8df7ed323811a07f2d9421f96df3827f9d9b5d310f0bc3b5593d0030ec076",
+  "exported_fields": "identifiers, categorical ratings, numeric confidence only",
+  "question_text_exported": false,
+  "formula_cache_used": false
+}

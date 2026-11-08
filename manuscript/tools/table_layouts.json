@@ -1,0 +1,249 @@
+{
+  "p1full": {
+    "label": "tab:p1full",
+    "caption": "P1: MSA risk reference $t$, answerable fraction $A$, and sample difference from actual MSA P1 with the percentile interval. Oracle operating points; descriptive.",
+    "weights": [
+      0.19608,
+      0.13725,
+      0.13725,
+      0.13725,
+      0.39216
+    ],
+    "head": "Model & Var. & $t$ & $A$ & $\\Delta A$ [interval]"
+  },
+  "p2coverage": {
+    "label": "tab:p2coverage",
+    "caption": "P2 at nominal coverage 0.70: sample transferred-coverage difference $\\Delta C$; fixed and double intervals; achieved own-quantile coverage $C_{\\rm own}$; own-quantile set-size ratio to MSA. Values are proportions, except the ratio.",
+    "weights": [
+      0.12857,
+      0.08571,
+      0.1,
+      0.22857,
+      0.22857,
+      0.11429,
+      0.11429
+    ],
+    "head": "Model & Var. & $\\Delta C$ & Fixed CI & Double CI & $C_{\\rm own}$ & Size ratio"
+  },
+  "p2size": {
+    "label": "tab:p2size",
+    "caption": "P2 mean set size and size-ratio uncertainty at nominal coverage 0.70. Ratios compare each variety with MSA using its own quantile; they do not equalise achieved coverage.",
+    "weights": [
+      0.14876,
+      0.10744,
+      0.13223,
+      0.1157,
+      0.24793,
+      0.24793
+    ],
+    "head": "Model & Var. & Own size & Ratio & Fixed CI & Double CI"
+  },
+  "s2full": {
+    "label": "tab:s2full",
+    "caption": "S2 on Moroccan at nominal coverage 0.70: achieved coverage / mean set size. All policies use the same underlying keys; pooled and group policies access more total variety rows than MSA-only. Router accuracy is 0.638.",
+    "weights": [
+      0.29204,
+      0.17699,
+      0.17699,
+      0.17699,
+      0.17699
+    ],
+    "head": "Policy & ALLaM & Fanar & Qwen3 & Gemma"
+  },
+  "accuracyfull": {
+    "label": "tab:accuracyfull",
+    "caption": "Accuracy / AUROC of $p_{\\max}$ on the confirmatory test. AUROC differences and intervals are in Table~\\ref{tab:3}.",
+    "weights": [
+      0.2,
+      0.2,
+      0.2,
+      0.2,
+      0.2
+    ],
+    "head": "Var. & ALLaM & Fanar & Qwen3 & Gemma"
+  },
+  "s4answers": {
+    "label": "tab:s4answers",
+    "caption": "S4 answered fraction under the transferred MSA threshold at target 0.20. $A_v$ is the dialect fraction and $\\Delta A=A_v-A_{\\rm MSA}$.",
+    "weights": [
+      0.14173,
+      0.09449,
+      0.11811,
+      0.12598,
+      0.25984,
+      0.25984
+    ],
+    "head": "Model & Var. & $A_v$ & $\\Delta A$ & Fixed CI & Double CI"
+  },
+  "s4risk": {
+    "label": "tab:s4risk",
+    "caption": "S4 risk and paired risk difference from MSA. Intervals concern $\\Delta R$, not exceedance of the 0.20 target. Absolute-risk intervals and both exceedance indicators are in \\texttt{S101\\_risk\\_diff.csv}.",
+    "weights": [
+      0.14173,
+      0.09449,
+      0.11811,
+      0.12598,
+      0.25984,
+      0.25984
+    ],
+    "head": "Model & Var. & $R_v$ & $\\Delta R$ & Fixed CI & Double CI"
+  },
+  "d4points": {
+    "label": "tab:d4points",
+    "caption": "D4 at target 0.20: answered fractions and risks before (MSA threshold) and after (own threshold) adaptation. The final interval is fixed-calibration uncertainty for adapted risk.",
+    "weights": [
+      0.13934,
+      0.09016,
+      0.13115,
+      0.13115,
+      0.13115,
+      0.13115,
+      0.2459
+    ],
+    "head": "Model & Var. & $A_{\\rm before}$ & $A_{\\rm after}$ & $R_{\\rm before}$ & $R_{\\rm after}$ & After-risk CI"
+  },
+  "d4gaps": {
+    "label": "tab:d4gaps",
+    "caption": "D4 change in answered fraction after adaptation and residual difference from MSA at the same nominal target. The change column includes its fixed interval; residual intervals are shown both ways. The full double-resampled adapted-risk intervals are in \\texttt{S91\\_calibration\\_sensitivity.csv}.",
+    "weights": [
+      0.11765,
+      0.08088,
+      0.27206,
+      0.10294,
+      0.21324,
+      0.21324
+    ],
+    "head": "Model & Var. & Change [fixed CI] & Residual & Fixed CI & Double CI"
+  },
+  "aradice": {
+    "label": "tab:aradice",
+    "caption": "AraDiCE: 1,400 test keys; paired differences from MSA in accuracy, P1 and coverage under the MSA quantile ($\\alpha=0.30$), with fixed-calibration intervals. Own-quantile size ratios are point estimates.",
+    "weights": [
+      0.11189,
+      0.07692,
+      0.23776,
+      0.23776,
+      0.23776,
+      0.0979
+    ],
+    "head": "Model & Var. & $\\Delta$ accuracy & $\\Delta$ P1 & $\\Delta$ coverage & Size ratio"
+  },
+  "indep": {
+    "label": "tab:indep",
+    "caption": "Agreement between the separate metric implementation and the original results.",
+    "weights": [
+      0.28333,
+      0.16667,
+      0.55
+    ],
+    "head": "Quantity & Cells / items & Reported agreement"
+  },
+  "ordersensitivity": {
+    "label": "tab:ordersensitivity",
+    "caption": "Order-sensitivity rate / paired difference from MSA, with the 95\\% interval below. Three decimal places retain the small positive endpoint for ALLaM--EGY.",
+    "weights": [
+      0.09774,
+      0.22556,
+      0.22556,
+      0.22556,
+      0.22556
+    ],
+    "head": "Var. & ALLaM & Fanar & Qwen3 & Gemma"
+  },
+  "rotationgaps": {
+    "label": "tab:rotationgaps",
+    "caption": "Differences from MSA averaged over four rotations, with paired key-bootstrap intervals. Every difference keeps its sign under all four rotations.",
+    "weights": [
+      0.16418,
+      0.20896,
+      0.20896,
+      0.20896,
+      0.20896
+    ],
+    "head": "Var. / quantity & ALLaM & Fanar & Qwen3 & Gemma"
+  },
+  "paired": {
+    "label": "tab:paired",
+    "caption": "Paired rotation comparison. $D$ is cross-version answer-change indicator minus within-variety one-rotation change; $D^\\prime$ uses MSA one-rotation change as the comparator.",
+    "weights": [
+      0.12308,
+      0.09231,
+      0.10769,
+      0.10769,
+      0.28462,
+      0.28462
+    ],
+    "head": "Model & Var. & P3 & Within & $D$ [CI] & $D^\\prime$ [CI]"
+  },
+  "g1": {
+    "label": "tab:g1",
+    "caption": "G1: agreement among extractable generated answers, unextractable fraction (Unext.), accepted fraction and selective risks. All cells use 500 robustness keys. Acceptance uses re-scored original-order confidence and the original MSA threshold. Equal risks need not imply identical answers.",
+    "weights": [
+      0.13386,
+      0.08661,
+      0.29134,
+      0.11024,
+      0.12598,
+      0.12598,
+      0.12598
+    ],
+    "head": "Model & Var. & Agreement [CI] & Unext. & Accepted fraction & Logit risk & Gen. risk"
+  },
+  "g2": {
+    "label": "tab:g2",
+    "caption": "ALLaM chat-template generation (G2): 500 keys per variety. Agreement with raw-prompt and chat-prompt letter choices are different comparisons.",
+    "weights": [
+      0.13793,
+      0.22414,
+      0.22414,
+      0.2069,
+      0.2069
+    ],
+    "head": "Var. & Raw agreement & Chat agreement & Unextractable & Gen. accuracy"
+  },
+  "auditflags": {
+    "label": "tab:auditflags",
+    "caption": "Screen flag rates; model judgements rather than verified dataset defect rates.",
+    "weights": [
+      0.0922,
+      0.22695,
+      0.22695,
+      0.22695,
+      0.22695
+    ],
+    "head": "Var. & Basic flag & Q2 = no & Q3 = no & Strict flag"
+  },
+  "auditagreement": {
+    "label": "tab:auditagreement",
+    "caption": "Within-model consistency across two sessions on 150 pairs. Cohen\\textquotesingle s $\\kappa$ uses three response categories.",
+    "weights": [
+      0.35789,
+      0.29474,
+      0.13684,
+      0.21053
+    ],
+    "head": "Check & Observed agreement & $\\kappa$ & Disagreements"
+  },
+  "s1": {
+    "label": "tab:s1",
+    "caption": "S1 ranges over the 20 dialect--model cells: empirical frequency of coverage within 0.05 of 0.70, and mean achieved coverage. These ranges are not confidence intervals.",
+    "weights": [
+      0.2381,
+      0.40476,
+      0.35714
+    ],
+    "head": "Calibration keys & Within-target frequency & Mean coverage"
+  },
+  "s3": {
+    "label": "tab:s3",
+    "caption": "S3: expected calibration error / multiclass Brier score on the confirmatory test. Full confidence and Brier intervals are in the CSV.",
+    "weights": [
+      0.14286,
+      0.21429,
+      0.21429,
+      0.21429,
+      0.21429
+    ],
+    "head": "Var. & ALLaM & Fanar & Qwen3 & Gemma"
+  }
+}

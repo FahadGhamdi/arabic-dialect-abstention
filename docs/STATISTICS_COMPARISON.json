@@ -1,0 +1,225 @@
+[
+  {
+    "file": "results/confirm/P1_selective.csv",
+    "rows": 28,
+    "different_columns": {
+      "d_answerable": 3.5563380281697365e-05,
+      "d_lo": 0.0006866197183098555,
+      "d_hi": 0.0007042253521126751,
+      "aurc": 0.0001539540271934675,
+      "d_aurc": 6.228007284718451e-06,
+      "d_aurc_lo": 0.00012559826536273633,
+      "d_aurc_hi": 9.544085781662548e-05
+    },
+    "text_cells_different": 0
+  },
+  {
+    "file": "results/confirm/P2_conformal.csv",
+    "rows": 224,
+    "different_columns": {},
+    "text_cells_different": 0
+  },
+  {
+    "file": "results/confirm/P3_churn.csv",
+    "rows": 28,
+    "different_columns": {},
+    "text_cells_different": 0
+  },
+  {
+    "file": "results/confirm/S1_calib_efficiency.csv",
+    "rows": 196,
+    "different_columns": {},
+    "text_cells_different": 0
+  },
+  {
+    "file": "results/confirm/S2_variety_aware.csv",
+    "rows": 280,
+    "different_columns": {},
+    "text_cells_different": 0
+  },
+  {
+    "file": "results/confirm/S3_calibration.csv",
+    "rows": 28,
+    "different_columns": {},
+    "text_cells_different": 0
+  },
+  {
+    "file": "results/confirm/S4_operational_selective.csv",
+    "rows": 112,
+    "different_columns": {},
+    "text_cells_different": 0
+  },
+  {
+    "file": "results/diag/D1_D2_discrimination.csv",
+    "rows": 28,
+    "different_columns": {},
+    "text_cells_different": 0
+  },
+  {
+    "file": "results/diag/D4_variety_threshold.csv",
+    "rows": 112,
+    "different_columns": {
+      "tau_v": 0.017020000000000035,
+      "answered_v_thr": 0.015492957746478908,
+      "ans_lo": 0.014771126760563358,
+      "ans_hi": 0.016901408450704203,
+      "realised_risk_v_thr": 0.019503900267871327,
+      "risk_lo": 0.01806148855044659,
+      "risk_hi": 0.01897714820345084,
+      "recoverable": 0.015492957746478908,
+      "rec_lo": 0.017605633802816878,
+      "rec_hi": 0.013380281690140883,
+      "residual_gap": 0.015492957746478908,
+      "res_lo": 0.015492957746478908,
+      "res_hi": 0.015492957746478853
+    },
+    "text_cells_different": 0
+  },
+  {
+    "file": "results/robust/R1_order_sensitivity.csv",
+    "rows": 28,
+    "different_columns": {},
+    "text_cells_different": 0
+  },
+  {
+    "file": "results/robust/R2_gap_stability.csv",
+    "rows": 24,
+    "different_columns": {},
+    "text_cells_different": 0
+  },
+  {
+    "file": "results/robust/R3_s4_by_order.csv",
+    "rows": 24,
+    "different_columns": {},
+    "text_cells_different": 0
+  },
+  {
+    "file": "results/robust/R4_p3_decomposition.csv",
+    "rows": 28,
+    "different_columns": {},
+    "text_cells_different": 0
+  },
+  {
+    "file": "results/robust/R5_generation.csv",
+    "rows": 35,
+    "different_columns": {},
+    "text_cells_different": 0
+  },
+  {
+    "file": "results/sens/S91_calibration_sensitivity.csv",
+    "rows": 24,
+    "different_columns": {
+      "s4_d_ans_rs": 1.408450704223907e-05,
+      "s4_lo_rs": 0.0007042253521125641,
+      "s4_width_ratio": 0.013513513513513153,
+      "risk_rs": 1.7194384773794313e-05,
+      "d4_res_rs": 5.6338028169039545e-05,
+      "d4_res_hi_rs": 0.001373239436619749,
+      "d4_riskv_rs": 4.08535278940414e-05,
+      "d4_riskv_hi_rs": 0.00017196242727876565,
+      "d4_rec_rs": 6.830985915493026e-05,
+      "d4_rec_lo_rs": 1.7605633802819654e-05,
+      "d4_rec_hi_rs": 0.0007218309859154809,
+      "tau_v_median": 0.0011200000000000099
+    },
+    "text_cells_different": 0
+  },
+  {
+    "file": "results/sens/S91_rotation_sensitivity.csv",
+    "rows": 24,
+    "different_columns": {
+      "d_ans_avg_rs": 3.0500000000002747e-05,
+      "lo_rs": 1.2499999999998623e-05
+    },
+    "text_cells_different": 0
+  },
+  {
+    "file": "results/sens/S92_reproducibility.csv",
+    "rows": 24,
+    "different_columns": {
+      "d_p1_confirm": 0.0040000000000000036
+    },
+    "text_cells_different": 0
+  },
+  {
+    "file": "results/sens/S93_R4_paired.csv",
+    "rows": 24,
+    "different_columns": {},
+    "text_cells_different": 0
+  },
+  {
+    "file": "results/sens/S94_D4_distance.csv",
+    "rows": 20,
+    "different_columns": {},
+    "text_cells_different": 0
+  },
+  {
+    "file": "results/supp/S101_risk_diff.csv",
+    "rows": 28,
+    "different_columns": {
+      "d_risk_rs": 1.6225796732452502e-05,
+      "d_risk_rs_lo": 0.0008742081354986679,
+      "d_risk_rs_hi": 0.00034124161272803405,
+      "risk_rs_lo": 2.3877745940759088e-06
+    },
+    "text_cells_different": 0
+  },
+  {
+    "file": "results/supp/S102_gen_selective_risk.csv",
+    "rows": 28,
+    "different_columns": {},
+    "text_cells_different": 0
+  },
+  {
+    "file": "results/validity/L1_ifm_filter.csv",
+    "rows": 20,
+    "different_columns": {
+      "dp1_lo": 0.0020950704225352057,
+      "dp1_hi": 7.042253521119535e-05,
+      "kept_dp1_lo": 0.002238805970149249,
+      "kept_dp1_hi": 1.851851851850106e-05
+    },
+    "text_cells_different": 0
+  },
+  {
+    "file": "results/validity/L2_fidelity.csv",
+    "rows": 80,
+    "different_columns": {
+      "n": 1.0,
+      "sim_mean": 4.492993082605423e-05,
+      "dacc": 0.0023550191345305116,
+      "dacc_lo": 0.010210212219337822,
+      "dacc_hi": 0.006351303735024725,
+      "chg": 0.0021141649048626032,
+      "chg_lo": 0.009892864470432916,
+      "chg_hi": 0.009194164191220489,
+      "dp1": 0.012684989429175508,
+      "dp1_lo": 0.042283298097251565,
+      "dp1_hi": 0.023540378765577435,
+      "dcov": 0.0021810688575480963,
+      "dcov_lo": 0.010883823516293328,
+      "dcov_hi": 0.010602603901838523,
+      "dans": 0.0021141649048626032,
+      "dans_lo": 0.01057082452431285,
+      "dans_hi": 0.010512729592064275
+    },
+    "text_cells_different": 0
+  },
+  {
+    "file": "results/validity/L4_aradice.csv",
+    "rows": 8,
+    "different_columns": {
+      "dacc_lo": 0.0014285714285714457,
+      "dacc_hi": 0.0007142857142857784,
+      "chg_lo": 0.001428571428571418,
+      "chg_hi": 0.001428571428571418,
+      "dp1_lo": 0.003553571428571406,
+      "dp1_hi": 0.002857142857142836,
+      "dcov_lo": 0.0028571428571427804,
+      "dcov_hi": 0.002142857142857224,
+      "dans_lo": 0.0014285714285714457,
+      "dans_hi": 0.0007142857142857229
+    },
+    "text_cells_different": 0
+  }
+]

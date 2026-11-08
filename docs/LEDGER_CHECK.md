@@ -1,6 +1,6 @@
 # Ledger consistency audit
 
-Rows: 108 — PASS 99, FAIL/ERROR 0, report-sourced (not recomputed) 9.
+Rows: 108 — PASS 105, FAIL/ERROR 0, report-sourced (not recomputed) 3.
 
 A consistency audit compares the manuscript's numbers and their stated comparison/denominator/interval type with the
 frozen result files; it is not an independent re-computation (that is Appendix C / results/indep_check).
@@ -19,17 +19,17 @@ frozen result files; it is not an independent re-computation (that is Appendix C
 | AU-03 | Abstract/§1 / T2 | ΔAUROC −0.03 to −0.07 for MAG and SYR in all four models | results/diag/D1_D2_discrimination.csv | [[-0.06, -0.03], 8] | [[-0.06, -0.03], 8] | **PASS** |
 | AU-04 | §3.3 / T2 | MSA AUROC 0.77–0.80 | results/diag/D1_D2_discrimination.csv | [0.77, 0.8] | [0.77, 0.8] | **PASS** |
 | AU-05 | §3.3 / T2 | AUGRC worse than MSA in all 20 cells (CI excludes 0) | results/diag/D1_D2_discrimination.csv | 20 | 20 | **PASS** |
-| AUD-01 | §3.2 / App. E / T2 | 400 pairs = 80 keys × 5 dialects; 150 double-rated | results/audit/AUDIT_RESULTS.md |  | "400/80/150" | **report-sourced** |
-| AUD-02 | §3.2 / App. E / T2 | basic defect rate 0.37 [0.31, 0.44]; UAE 0.44, EGY 0.33 | results/audit/AUDIT_RESULTS.md |  | "0.37 [0.31,0.44]" | **report-sourced** |
-| AUD-03 | §3.2 / App. E / T2 | invalidating the gold answer 0.08 overall (MAG 0.16); hint/ambiguity 0.34 | results/audit/AUDIT_RESULTS.md |  | "0.08; 0.16; 0.34" | **report-sourced** |
-| AUD-04 | §3.2 / App. E / T2 | κ: 0.86 meaning, 0.36 answer validity, 0.90 clarity (within-model consistency) | results/audit/AUDIT_RESULTS.md |  | "0.86/0.36/0.90" | **report-sourced** |
-| AUD-05 | §3.2 / App. E / T2 | 1,600 pair×model observations; Δacc −4.5 (unflagged) vs −6.2 (flagged); difference −1.8 [−8.6, +4.6]; answer change 26.9% vs 27.7% | results/audit/AUDIT_RESULTS.md |  | "\u22121.8 [\u22128.6,+4.6]" | **report-sourced** |
-| AUD-06 | §3.2 / App. E / T2 | after excluding flagged pairs (80 keys) operational answered fraction −6 to −20 pp; MAG per-model ΔP1 CIs ≈ ±40 pp | results/audit/AUDIT_RESULTS.md |  | "\u22126.7\u2026\u221220.2" | **report-sourced** |
+| AUD-01 | §3.2 / App. E / T2 | 400 pairs = 80 keys × 5 dialects; 150 double-rated | results/audit_recomputed/SCREEN_RECOMPUTED.json | [400, 80, 150] | [400, 80, 150] | **PASS** |
+| AUD-02 | §3.2 / App. E / T2 | basic defect rate 0.37 [0.31, 0.43]; UAE 0.44, EGY 0.33 | results/audit_recomputed/rates_recomputed.csv | [0.37, 0.31, 0.43] | [0.37, 0.31, 0.43] | **PASS** |
+| AUD-03 | §3.2 / App. E / T2 | invalidating the gold answer 0.08 overall (MAG 0.16); hint/ambiguity 0.34 | results/audit_recomputed/SCREEN_RECOMPUTED.json | [0.08, 0.16, 0.34] | [0.08, 0.16, 0.34] | **PASS** |
+| AUD-04 | §3.2 / App. E / T2 | κ: 0.86 meaning, 0.36 answer validity, 0.90 clarity (within-model consistency) | results/audit_recomputed/agreement_recomputed.csv | [0.86, 0.36, 0.9, 0.0] | [0.86, 0.36, 0.9, 0] | **PASS** |
+| AUD-05 | §3.2 / App. E / T2 | 1,600 pair×model observations; Δacc −4.5 (unflagged) vs −6.2 (flagged); difference −1.8 [−8.2, +5.1]; answer change 26.9% vs 27.7% | results/audit_recomputed/association_recomputed.csv | [-4.5, -6.2, -1.8, -8.2, 5.1] | [-4.5, -6.2, -1.8, -8.2, 5.1] | **PASS** |
+| AUD-06 | §3.2 / App. E / T2 | after excluding flagged pairs (80 keys) operational answered fraction −6 to −20 pp; MAG per-model ΔP1 interval widths 38–94 pp | results/audit_recomputed/sensitivity_recomputed.csv | [-20.0, -6.0] | [-20, -6] | **PASS** |
 | AUD-07 | §3.2 / App. E / EXT | resource documentation reports ≈5% error from a 32-item/dialect check | results/audit/AUDIT_RESULTS.md |  | "5%" | **report-sourced** |
 | COR-01 | Appendix C / T1 | largest P1 estimator difference: Gemma–UAE −0.064 (sample difference) vs −0.078 (bootstrap mean) | results/confirm/P1_selective.csv | [-0.064, -0.078] | [-0.064, -0.078] | **PASS** |
 | COR-02 | Appendix C / §2.5 / T1 | six P1 differences changed at the second decimal under the correction | results/confirm/P1_selective.csv | 6 | 6 | **PASS** |
 | COR-03 | Appendix C / T1 | S4 and P2 contrasts agree to the third decimal between the two estimators | results/confirm/S4_operational_selective.csv | 0.001 | 0.001 | **PASS** |
-| D01 | §2 Methods / DSN | 3,135 DAMM questions (keys) | data/damm.csv | 3135 | 3135 | **PASS** |
+| D01 | §2 Methods / DSN | 3,135 DAMM questions (keys) | data/damm_keys.csv | 3135 | 3135 | **PASS** |
 | D02 | §2 Methods / DSN | development sample 500 keys | data/pilot_keys.json | 500 | 500 | **PASS** |
 | D03 | §2 Methods / DSN | router 404 / calibration 808 / test 1,420 keys; seed 20261105 | data/confirmatory_splits.json | [404, 808, 1420, 20261105] | [404, 808, 1420, 20261105] | **PASS** |
 | D04 | §2 Methods / DSN | AraDiCE 600 calibration / 1,400 test parallel items | data/aradice_splits.json | [600, 1400] | [600, 1400] | **PASS** |

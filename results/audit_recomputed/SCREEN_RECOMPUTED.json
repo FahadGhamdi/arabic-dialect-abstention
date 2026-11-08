@@ -1,0 +1,240 @@
+{
+  "counts": {
+    "pairs": 400,
+    "keys": 80,
+    "double_rated": 150
+  },
+  "seed": 0,
+  "replicates": 2000,
+  "cluster": "question key; all five dialects retained together",
+  "key_order": "lexicographically sorted",
+  "quantile": "NumPy linear percentile",
+  "q2_unsure": 0.29,
+  "double_rated_basic": {
+    "session1": 0.34,
+    "session2": 0.32,
+    "both": 0.3,
+    "either": 0.36,
+    "adjudicated": 0.3333333333333333
+  },
+  "agreement": [
+    {
+      "check": "Q1",
+      "n": 150,
+      "observed": 0.9333333333333333,
+      "expected": 0.5358222222222222,
+      "kappa": 0.8563768671007277,
+      "disagreements": 10
+    },
+    {
+      "check": "Q2",
+      "n": 150,
+      "observed": 0.7066666666666667,
+      "expected": 0.5448,
+      "kappa": 0.3555946104276509,
+      "disagreements": 44
+    },
+    {
+      "check": "Q3",
+      "n": 150,
+      "observed": 0.9533333333333334,
+      "expected": 0.5513777777777777,
+      "kappa": 0.8959778085991679,
+      "disagreements": 7
+    },
+    {
+      "check": "Q4",
+      "n": 150,
+      "observed": 0.98,
+      "expected": 0.98,
+      "kappa": 0.0,
+      "disagreements": 3
+    }
+  ],
+  "rates": [
+    {
+      "dialect": "UAE",
+      "measure": "basic",
+      "rate": 0.4375,
+      "lo": 0.325,
+      "hi": 0.55
+    },
+    {
+      "dialect": "UAE",
+      "measure": "q2no",
+      "rate": 0.0625,
+      "lo": 0.0125,
+      "hi": 0.125
+    },
+    {
+      "dialect": "UAE",
+      "measure": "q3no",
+      "rate": 0.4125,
+      "lo": 0.3125,
+      "hi": 0.525
+    },
+    {
+      "dialect": "UAE",
+      "measure": "strict",
+      "rate": 0.6,
+      "lo": 0.4875,
+      "hi": 0.7
+    },
+    {
+      "dialect": "EGY",
+      "measure": "basic",
+      "rate": 0.325,
+      "lo": 0.225,
+      "hi": 0.425
+    },
+    {
+      "dialect": "EGY",
+      "measure": "q2no",
+      "rate": 0.0125,
+      "lo": 0.0,
+      "hi": 0.0375
+    },
+    {
+      "dialect": "EGY",
+      "measure": "q3no",
+      "rate": 0.3125,
+      "lo": 0.2125,
+      "hi": 0.4125
+    },
+    {
+      "dialect": "EGY",
+      "measure": "strict",
+      "rate": 0.4875,
+      "lo": 0.375,
+      "hi": 0.6
+    },
+    {
+      "dialect": "KSA",
+      "measure": "basic",
+      "rate": 0.3375,
+      "lo": 0.2375,
+      "hi": 0.45
+    },
+    {
+      "dialect": "KSA",
+      "measure": "q2no",
+      "rate": 0.1,
+      "lo": 0.0375,
+      "hi": 0.175
+    },
+    {
+      "dialect": "KSA",
+      "measure": "q3no",
+      "rate": 0.325,
+      "lo": 0.225,
+      "hi": 0.425
+    },
+    {
+      "dialect": "KSA",
+      "measure": "strict",
+      "rate": 0.5375,
+      "lo": 0.425,
+      "hi": 0.65
+    },
+    {
+      "dialect": "SYR",
+      "measure": "basic",
+      "rate": 0.4,
+      "lo": 0.2875,
+      "hi": 0.5125
+    },
+    {
+      "dialect": "SYR",
+      "measure": "q2no",
+      "rate": 0.0625,
+      "lo": 0.0125,
+      "hi": 0.125
+    },
+    {
+      "dialect": "SYR",
+      "measure": "q3no",
+      "rate": 0.325,
+      "lo": 0.225,
+      "hi": 0.425
+    },
+    {
+      "dialect": "SYR",
+      "measure": "strict",
+      "rate": 0.5375,
+      "lo": 0.425,
+      "hi": 0.65
+    },
+    {
+      "dialect": "MAG",
+      "measure": "basic",
+      "rate": 0.35,
+      "lo": 0.25,
+      "hi": 0.45
+    },
+    {
+      "dialect": "MAG",
+      "measure": "q2no",
+      "rate": 0.1625,
+      "lo": 0.0875,
+      "hi": 0.25
+    },
+    {
+      "dialect": "MAG",
+      "measure": "q3no",
+      "rate": 0.3375,
+      "lo": 0.2375,
+      "hi": 0.4375
+    },
+    {
+      "dialect": "MAG",
+      "measure": "strict",
+      "rate": 0.55,
+      "lo": 0.4375,
+      "hi": 0.6625
+    },
+    {
+      "dialect": "all",
+      "measure": "basic",
+      "rate": 0.37,
+      "lo": 0.3075,
+      "hi": 0.4325
+    },
+    {
+      "dialect": "all",
+      "measure": "q2no",
+      "rate": 0.08,
+      "lo": 0.05,
+      "hi": 0.11499999999999999
+    },
+    {
+      "dialect": "all",
+      "measure": "q3no",
+      "rate": 0.34249999999999997,
+      "lo": 0.28500000000000003,
+      "hi": 0.4025
+    },
+    {
+      "dialect": "all",
+      "measure": "strict",
+      "rate": 0.5425,
+      "lo": 0.46749999999999997,
+      "hi": 0.6175624999999997
+    }
+  ],
+  "source_rates": [
+    {
+      "source": "development",
+      "keys": 50,
+      "rate": 0.32400000000000007,
+      "lo": 0.252,
+      "hi": 0.39599999999999996
+    },
+    {
+      "source": "test",
+      "keys": 30,
+      "rate": 0.44666666666666666,
+      "lo": 0.3266666666666667,
+      "hi": 0.5666666666666667
+    }
+  ]
+}

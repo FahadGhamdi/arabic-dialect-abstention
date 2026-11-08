@@ -1,0 +1,12 @@
+{
+  "dataset": "MBZUAI/Dialectal-Arabic-MMLU",
+  "revision": "d7ca5ac8dc2bed489ac00bbfaa3656c3a0bd8c85",
+  "file": "data/test-00000-of-00001.parquet",
+  "parquet_sha256": "e4d548f482f202cd50c1ac0daa5a0a7202fe1fa4c28ccf846cc8d71c552227e2",
+  "csv_sha256": "ca23417bf39974784ee6e723ab1bfdc8aa8c0da0c47a1da158c4a8aa4f1c948d",
+  "rows": 21945,
+  "keys": 3135,
+  "skeleton_matches": true,
+  "private_text_input": true,
+  "historical_inference_snapshot_verified": false
+}

@@ -1,0 +1,482 @@
+%% Manuscript v1.0. Official MDPI template; verified v0.6/v0.7 content merged.
+\documentclass[applsci,article,submit,pdftex,oneauthor]{Definitions/mdpi}
+\usepackage{longtable,booktabs,array,calc,etoolbox,placeins,float}
+\emergencystretch=2em
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\firstpage{1}
+\makeatletter\setcounter{page}{\@firstpage}\makeatother
+\pubvolume{1}\issuenum{1}\articlenumber{0}\pubyear{2026}\copyrightyear{2026}
+\datereceived{ }\daterevised{ }\dateaccepted{ }\datepublished{ }
+
+\Title{Risk and Coverage across Arabic Dialects in Selective Question Answering}
+\newcommand{\orcidauthorA}{0000-0002-4161-2658}
+\Author{Fahad AlGhamdi $^{1,*}$\orcidA{}}
+\AuthorNames{Fahad AlGhamdi}
+\address{$^{1}$ \quad Computer Science Department, Al-Baha University, Albaha 65779, Saudi Arabia; fghamdi@bu.edu.sa}
+\corres{Correspondence: fghamdi@bu.edu.sa}
+
+\featuredapplication{For Arabic multiple-choice question-answering systems that use confidence thresholds or prediction sets, evaluate realised risk and coverage separately for each dialect served. A target selected on Modern Standard Arabic calibration data may yield different operating points on dialectal versions of the same questions.}
+\abstract{A selective-answering policy calibrated on Modern Standard Arabic (MSA) may offer different levels of service on dialectal questions. We examine this transfer on 1,420 held-out parallel questions from DialectalArabicMMLU, using four open-weight checkpoints from three model families, with AraDiCE as a second resource. An MSA threshold targeting 20\% empirical calibration risk answers fewer questions in all 20 dialect--model cells; 19 paired intervals exclude zero. Paired intervals support higher risk than MSA for Syrian in four models with calibration fixed and three under calibration resampling, and for Moroccan in two under either analysis. At the risk MSA attains when answering half the questions, Moroccan and Syrian versions are answerable on roughly a quarter to a third. At a 70\% nominal conformal-coverage target, MSA-calibrated sets lose 6--13 percentage points of coverage on these varieties; per-dialect quantiles produce sets 17--32\% larger than MSA's. The findings support joint reporting of risk and coverage by dialect. They concern multiple-choice answering, and undetected differences in meaning between the published versions may contribute to the observed gaps.}
+\keyword{Arabic dialects; selective prediction; abstention; conformal prediction; calibration; large language models; distribution shift; evaluation}
+
+\input{layout_pagination}
+
+\begin{document}
+
+\hypertarget{introduction}{%
+\section{Introduction}\label{introduction}}
+
+A question-answering system can withhold an answer when its confidence falls below a threshold, or return a set of candidate answers calibrated to a coverage target. Choosing that policy on one language variety and using it on another raises a practical question: does the target still describe the answers users receive? We study policies chosen on labelled Modern Standard Arabic (MSA) data and applied to Egyptian, Syrian, Saudi, Emirati and Moroccan versions of the same benchmark questions.
+
+Large language models are less accurate on dialectal Arabic than on MSA \cite{altakrori2026dialectalarabicmmlu, mousi2025aradice}, and selective prediction can widen gaps between groups \cite{jones2021selective}. Accuracy alone does not describe the service offered by an abstention policy: a system may answer fewer questions, make more errors among those it answers, or do both. We measure these outcomes when an MSA-calibrated policy is transferred to dialectal inputs, then examine how they change when calibration uses examples from the target dialect.
+
+The evaluation uses parallel multiple-choice items and a held-out test split. In DialectalArabicMMLU \cite{altakrori2026dialectalarabicmmlu}, each question is available in MSA and five dialects through human translation. AraDiCE \cite{mousi2025aradice}, produced by machine translation and human post-editing, supplies a second resource for Egyptian and Levantine. Four open-weight checkpoints of 7--9B parameters are evaluated with a common prompt format and option-letter scoring procedure. The analysis plan and code were fixed before the confirmatory analysis; Section~\ref{pre-specification-timing-of-each-analysis-and-uncertainty} distinguishes this from specification before score collection.
+
+An MSA threshold targeting 20\% empirical calibration risk answers fewer dialect questions in every model. Paired intervals support higher realised risk than MSA for Syrian in four models with calibration fixed and three under calibration resampling, and for Moroccan in two under either analysis. These comparisons differ from testing whether risk exceeds the nominal target. At the risk MSA attains when answering half the questions, Moroccan and Syrian versions are answerable on roughly a quarter to a third. MSA-calibrated conformal sets lose 6--13 percentage points of coverage on these varieties at a 70\% target; per-dialect quantiles produce larger sets without reaching 70\% empirical coverage in every cell. Lower confidence discrimination on Moroccan and Syrian versions and checks across four cyclic option rotations provide further context for these operating-point differences.
+
+The contribution is a paired evaluation of policy transfer across Arabic varieties: how much of the benchmark each policy answers, the risk or set coverage it achieves, and the trade-off after per-dialect calibration. The diagnostic analyses help interpret the observed gaps, while the validity checks assess their sensitivity to potentially defective parallel items. The study releases its analysis record, code, scores and uncertainty estimates. Its conclusions concern the published question versions and the evaluated policies; Section~\ref{discussion} discusses their limits.
+
+\hypertarget{related-work}{%
+\section{Related Work}\label{related-work}}
+
+Selective classification trades coverage for risk by allowing a classifier to abstain \cite{elyaniv2010foundations, geifman2017selective}. Its evaluation has pitfalls of its own: summaries of the risk--coverage curve such as AURC conflate accuracy with ranking quality, and Traub et al. \cite{traub2024overcoming} proposed the area under the generalised risk--coverage curve (AUGRC), an interpretable measure of undetected failures that depends on both accuracy and confidence ranking. We report both AUROC and AUGRC in Section~\ref{diagnostic-views}. Jones et al. \cite{jones2021selective} showed that abstention can widen accuracy gaps between groups, because the examples a model is unsure about are not spread evenly, and argued for group-conditional analysis. Later work studied selective classification and regression under explicit fairness constraints \cite{lee2021fair, shah2022selective}. Kamath et al. \cite{kamath2020selective} examined selective question answering under domain shift and found that softmax confidence abstains poorly out of domain. Our S4 and P1 quantities apply these ideas with dialect as the group variable and with a policy tuned on one group and used on another. Building on this work, we evaluate an MSA-calibrated policy on parallel dialectal questions and compare its operating points with those obtained after per-dialect calibration.
+
+Split conformal prediction gives a marginal coverage guarantee under exchangeability of calibration and test data \cite{vovk2005algorithmic, angelopoulos2023conformal}. Under distribution shift, the usual guarantee need not apply, and a line of work has characterised what remains under covariate shift \cite{tibshirani2019conformal} and under more general departures \cite{barber2023conformal}. Conditional calibration within known groups (Mondrian conformal prediction) provides group-specific marginal coverage under within-group exchangeability \cite{vovk2012conditional}, and Romano et al. \cite{romano2020malice} framed equal coverage across groups as a fairness requirement. For language models, conformal methods have been applied to multiple-choice benchmarks \cite{kumar2023conformal, ye2024benchmarking}, to generation \cite{quach2024conformal, mohri2024conformal} and to settings without logit access \cite{su2024api}, and Campos et al. \cite{campos2024conformal} survey the area. Our P2 and S2 quantities measure the coverage that an MSA quantile loses on dialect inputs and the set sizes produced by per-variety quantiles at the same nominal target.
+
+Whether language models know when they do not know has been studied through verbalised and token-level confidence \cite{kadavath2022language, xiong2024can}, through semantic uncertainty over sampled answers \cite{kuhn2023semantic}, and through selective prediction across tasks and shifts \cite{varshney2022investigating, chen2023adaptation}. Surveys of abstention in language models catalogue the policies in use and their failure modes \cite{wen2025know}. Most of this work evaluates one language. Ahuja et al. \cite{ahuja2022calibration} showed that massively multilingual models fine-tuned in English and transferred zero-shot are poorly calibrated on low-resource and typologically distant languages, and that a few labelled examples in the target language reduce the miscalibration. That work is the closest precedent for our question, at the level of language rather than dialect.
+
+Dialect robustness has been studied as a disparity problem in English, with transformation-based parallel data \cite{ziems2022value, ziems2023multivalue} and with measurements of the dialect gap across several languages and of its economic, social and linguistic correlates \cite{kantharuban2023quantifying}. DIALECTBENCH \cite{faisal2024dialectbench} gathers evaluation sets for 281 language varieties into one benchmark, and dialect-conditioned judgements by language models have been documented as a harm in their own right \cite{hofmann2024dialect}. For Arabic, parallel dialectal corpora \cite{bouamor2018madar}, dialect-identification shared tasks \cite{abdulmageed2021nadi} and a continuous measure of dialectness \cite{keleg2023aldi} provide the linguistic background, and our similarity covariate in Section~\ref{validity-of-the-paired-versions-without-human-raters} is a coarse relative of the latter. Evaluations of Arabic-centric and general models on dialects report lower quality than on MSA \cite{huang2024acegpt, abdelali2024larabench, robinson2025alqasida}, and the two resources we use, DialectalArabicMMLU \cite{altakrori2026dialectalarabicmmlu}, which extends MMLU-Redux \cite{gema2025mmluredux, hendrycks2021mmlu}, and AraDiCE \cite{mousi2025aradice}, which translates ArabicMMLU items \cite{koto2024arabicmmlu}, were built to measure that gap. Al-Laith and Kebdani \cite{allaith2025calibration} evaluated the calibration of eight pre-trained models on Arabic dialect identification and found that it varies across dialects, but their object is the confidence of the dialect classifier, whereas ours is the transfer of an answer policy across parallel phrasings. A published quality screen of DialectalArabicMMLU \cite{ifm2026verified} removes rows that three LLM judges flag unanimously, and we use it as an external filter.
+
+The measurement we rely on, scoring option letters by next-token probability \cite{robinson2023leveraging}, has known weaknesses. Surface-form competition can split probability mass among equivalent strings \cite{holtzman2021surface}; option order and option labels bias the choice \cite{zheng2024robust, pezeshkpour2024sensitivity, alzahrani2024benchmarks}; first-token probabilities and generated text can disagree, mostly for instruction-tuned models \cite{wang2024myanswer, lyu2024beyond}; and some benchmark items can be answered without their question \cite{balepur2024artifacts}. Translated benchmarks add a second layer of doubt: translation artefacts affect cross-lingual comparisons \cite{artetxe2020translation}, and translated MMLU variants carry errors and culturally mismatched items \cite{singh2024global}. Language-model judges, which we use in a screening role, have documented biases of their own \cite{zheng2023judging, chiang2023can}. Sections 4.2 and 4.4 address the parts of this that we could test, with four cyclic rotations, free and chat-template generation, an external filter, a similarity covariate, a second resource and a model-assisted screen whose limits are stated where it is used.
+
+\hypertarget{materials-and-methods}{%
+\section{Materials and Methods}\label{materials-and-methods}}
+
+\hypertarget{resources}{%
+\subsection{Resources}\label{resources}}
+
+DialectalArabicMMLU (DAMM) \cite{altakrori2026dialectalarabicmmlu} contains 3,135 four-option questions drawn from MMLU-Redux, each available in MSA, Egyptian (EGY), Syrian (SYR), Saudi (KSA), Emirati (UAE), Moroccan (MAG) and English. The dialect versions were produced by manual translation and adaptation through a language-service provider, with a translator, a reviewer and an adjudicator per dialect. The resource's authors report a quality check of 32 items per dialect in which about 5\% of translations contained inaccuracies, and a second review round for the Emirati and Syrian sets. A shared key identifies a question across varieties. We keep the resource's label MAG for the Moroccan set.
+
+AraDiCE \cite{mousi2025aradice} serves as a second resource. Its ArabicMMLU items \cite{koto2024arabicmmlu} were machine-translated into Egyptian and Levantine (LEV) and human post-edited, and they are paired with the ArabicMMLU MSA originals. We sampled 2,000 parallel items (600 for calibration, 1,400 for test, stratified by subject group). AraDiCE has no Moroccan variety, so the Moroccan results rest on DAMM alone.
+
+\hypertarget{models}{%
+\subsection{Models}\label{models}}
+
+We evaluate ALLaM-7B-Instruct-preview \cite{bari2025allam}, Fanar-1-9B \cite{fanar2025}, Qwen3-8B-Base \cite{qwen3} and gemma-2-9b \cite{gemma2}, all open weights, run locally in bf16. ALLaM is the only instruction-tuned checkpoint, the other three being base models. Fanar-1-9B is a continual pre-training of the Gemma-2-9B base model \cite{fanar2025}, so the four checkpoints come from three base families. We report them as four models because their outputs differ materially, and we return to the shared base in Section~\ref{discussion}.
+
+\hypertarget{measurement}{%
+\subsection{Measurement}\label{measurement}}
+
+Arabic-variety prompts contain an Arabic instruction, three fixed MSA demonstrations, and the question with four options labelled A to D. English prompts use an English instruction and English demonstrations. For each letter, the scorer collects unique token identifiers for its space-prefixed and unprefixed forms when each is a single token; if neither is, it uses the final token of the space-prefixed form. Their log-probabilities are combined by log-sum-exp and renormalised over the four letters. The answer is the highest-scoring letter, confidence is its renormalised probability $p_{\max}$, and conformal nonconformity is $1-p_{\mathrm{true}}$. Models ran locally in bf16 on Apple-silicon MPS, in evaluation mode, with left padding, a maximum input length of 2,048 tokens and batches sorted by prompt character length. The checkpoints were loaded by name without pinned revisions; exact weight revisions and the complete original dependency lock were not recorded. Original-order re-scoring and raw-prompt generation reuse the main prompt. Rotation checks change option order, and the separate ALLaM check uses its chat template (Section~\ref{robustness-of-the-measurement}). Stored option log-probabilities have four decimals and derived probabilities five; Appendix~\ref{independent-computational-check} describes the resulting boundary effects.
+
+\hypertarget{splits}{%
+\subsection{Splits}\label{splits}}
+
+A domain-stratified development sample of 500 keys (seed 0) was used to design the study and is reported only as development. Three further keys supplied the fixed demonstrations and were excluded from the confirmatory pool (3,135 -- 500 -- 3 = 2,632). The remaining 2,632 keys were allocated before confirmatory scoring began (seed 20261105) to router training (404 keys), calibration (808) and test (1,420), with all varieties of a key kept in the same split. All primary estimates are computed on the test keys and every deployable threshold or quantile is chosen on the calibration keys. The one quantity that reads test labels to choose its operating point is P1, which is descriptive by design (Section~\ref{quantities}). The seeds 20261104 and 20261106 belong to the samples drawn for the equivalence screen (Section~\ref{validity-of-the-paired-versions-without-human-raters}), not to the splits.
+
+\hypertarget{pre-specification-timing-of-each-analysis-and-uncertainty}{%
+\subsection{Pre-specification, timing of each analysis, and uncertainty}\label{pre-specification-timing-of-each-analysis-and-uncertainty}}
+
+The local project record distinguishes specification before scoring from specification before analysis. Splits and scoring scripts were fixed on 4 November before scoring began at 20:57. The first analysis plan and code, covering P1--P3 and S1--S3, were recorded at approximately 21:30 during ALLaM scoring; S4 was added at approximately 23:30 during Qwen3 scoring. The record states that no confirmatory score file had been opened for analysis at either point. The confirmatory analysis ran the next morning. Later analyses were specified in dated addenda after the main results had been seen and before their own computation, except for the post-hoc summaries identified in Table~\ref{tab:1}. This was a locally documented plan rather than a public pre-registration \cite{nosek2018preregistration, vanmiltenburg2021preregistering}. Appendix~\ref{plan-history-and-freeze-log} records the chronology and a timestamp inconsistency. File hashes identify the archived code but do not independently establish when it existed.
+
+\begin{table}[!htbp]\footnotesize\setlength{\tabcolsep}{4pt}
+\caption{Analyses by the time of their specification.}\label{tab:1}
+\begin{tabular}{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.2581}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3548}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3871}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Tier
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Analyses
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Specified
+\end{minipage} \\
+\midrule\noalign{}
+Specified before the confirmatory analysis & P1, P2, P3, S1, S2, S3 & plan v1 and code v1 written during score collection (ALLaM about half scored), code frozen by sha256; no score file had been read \\
+Specified before the confirmatory analysis, added during collection & S4 & added to the frozen code with ALLaM complete and Qwen3 partly scored; no confirmatory file opened for analysis \\
+Addendum, before its computation & screen sensitivity analyses & after the main results; frozen before computation \\
+Addendum, before its computation & validity layers L1, L2, L4 & same \\
+Addendum, before its computation & diagnostic views (accuracy, discrimination, D4) & same \\
+Addendum, before its computation & robustness protocol (rotations, generation, re-scoring) & before the robustness scoring \\
+Addendum, before its computation & verification package (double resampling, paired rotation comparison, independent check) & same \\
+Addendum, before its computation & risk-difference and generated-answer supplements & same \\
+Exploratory / post hoc & ceiling counts for D4 (Section~\ref{diagnostic-views}); calibration-resampling range for one conformal cell & after the relevant results were seen \\
+Claim withdrawn & P3 as a stand-alone measure of dialect-specific instability & after the robustness protocol (Section~\ref{robustness-of-the-measurement}) \\
+\bottomrule\noalign{}
+\end{tabular}
+\end{table}
+
+Uncertainty is quantified by a paired percentile bootstrap over test keys \cite{efron1993bootstrap, koehn2004statistical}, with 2,000 replicates and 95\% intervals while calibration is held fixed. A sensitivity analysis independently resamples calibration and test keys, preserving pairing across varieties and re-selecting thresholds or quantiles in each of 1,000 replicates. Both intervals are reported for quantities materially affected by calibration uncertainty. Point estimates are observed-sample values and differences. Intervals are pointwise, without multiplicity adjustment; counts of intervals excluding a reference value describe the observed pattern rather than simultaneous confidence across all cells. Following cautions about significance testing in NLP \cite{dror2018hitchhiker}, we report effect sizes with intervals. Appendix~\ref{independent-computational-check} explains the distinction between sample differences and bootstrap-mean centres.
+
+\hypertarget{quantities}{%
+\subsection{Quantities}\label{quantities}}
+
+Every quantity compares a variety v with MSA on the same test keys. They answer different questions and should not be read as substitutes for one another.
+
+S4, operational selective prediction, is the primary operational evidence for the transferred abstention policy. On MSA calibration items, we sort by confidence and compute the error rate $r_k$ among the $k$ most confident. The threshold $\tau$ is the confidence at the end of the largest prefix satisfying $r_k \leq r^*$; if none qualifies, $\tau=1.01$. Test items are accepted when their confidence is at least $\tau$, using the same threshold for every variety. This includes all items tied at the boundary, so the threshold rule can accept more items than the qualifying prefix (Appendix~\ref{independent-computational-check}). We report answered fraction, realised risk among accepted items and paired differences from MSA at $r^*\in\{0.15,0.20,0.25,0.30\}$, with 0.20 as the main target. The target is an empirical calibration-risk ceiling; it supplies no finite-sample guarantee for test risk.
+
+P1, the answerable fraction at the MSA-matched risk, is descriptive. Let t be the risk MSA attains on test when it answers its 50\% most confident questions. For each variety, P1 is the largest fraction of questions that can be answered, in confidence order, while keeping the error rate at or below t. Because the largest qualifying prefix can extend a little beyond the half-way point, MSA's own P1 is approximately rather than exactly 0.50 (0.5000$-$0.5014 across the four models), and the differences are taken from these actual values. P1 reads the risk from test labels and uses an oracle threshold. It describes the risk--coverage curves, is not a deployable policy, and has an operating point different from S4's.
+
+P2 concerns split-conformal prediction sets. With nonconformity $1-p_{\mathrm{true}}$, we take the calibration order statistic at rank $\lceil(n+1)(1-\alpha)\rceil$ as the quantile $\hat q$. A prediction set contains each option whose nonconformity is at most $\hat q$. We measure test coverage under the MSA quantile and mean set size under each variety's own quantile, including the ratio to MSA's set size at the same nominal target. The usual marginal coverage guarantee assumes exchangeable calibration and test examples, an assumption that cannot be taken for granted when transferring from MSA to dialect inputs. The main error level is $\alpha=0.30$, with $\alpha=0.10$ also reported.
+
+S2 compares four calibration policies for dialect inputs with an equal number of calibration keys per variety: a pooled calibration set, group-conditional (Mondrian) calibration with the true variety label, the same with a variety predicted by a character n-gram classifier trained on the router split, and a conservative rule that unions the sets of the varieties the classifier considers plausible. We report achieved coverage and set size, and the fraction of the oracle's coverage gain that each practical method recovers. Equal keys per variety is not equal annotation: the MSA-only quantile uses 808 calibration rows, whereas the pooled set uses 808 $\times$ 7 variety rows and each Mondrian group its own 808, and the classifier is trained on 404 $\times$ 7 texts. A policy that predicts the variety carries no coverage guarantee for the true variety.
+
+D4 re-selects the S4 threshold on the calibration items of each variety (same rule, same target) and evaluates it on that variety's test items: realised risk, answered fraction, the contrast with the transferred threshold, and the residual gap to MSA at the same nominal target.
+
+Confidence discrimination is measured by the AUROC of $p_{\max}$ for correct versus incorrect answers. We also report AUGRC \cite{traub2024overcoming}, which reflects both accuracy and confidence ranking, with comparisons paired by key. The robustness analyses examine option-order sensitivity across four cyclic rotations, stability of the gaps over those rotations, agreement between generated and letter-logit answers, and re-run reproducibility.
+
+None of these quantities amounts to a guarantee for dialect users: S4 targets an empirical risk on a calibration sample, the conformal guarantee is marginal and depends on exchangeability, and equalising a nominal target does not equalise achieved risk. For that reason realised risk and achieved coverage are always shown next to the policy's output.
+
+\hypertarget{use-of-generative-ai-tools}{%
+\subsection{Use of generative AI tools}\label{use-of-generative-ai-tools}}
+
+Claude Fable 5.1 (Anthropic; \nolinkurl{claude-fable-5-1}), accessed through Claude Code during 4--8 November 2026, was used to write and revise analysis and plotting code, run local model-scoring workflows, maintain the claims ledger, and draft and revise the manuscript. This identifier was recorded for the manuscript-preparation sessions; model versions for earlier sessions were not consistently logged. OpenAI tools, including ChatGPT and Codex, were used to review analysis plans, code and drafts. GPT-6 Astra is recorded for some review sessions; exact versions were not retained for every session. A Codex-assisted comparison of displayed estimates with result files identified the reporting correction documented in Appendix~\ref{independent-computational-check}. The author reviewed and edited this work and is responsible for the design, analyses, interpretations and final manuscript.
+
+LLM judgments also enter the validity analyses. L1 uses a published filter based on three LLM judges \cite{ifm2026verified}; the translation-equivalence screen used separate GPT-6 Astra Extra High sessions for two ratings and adjudication. Section~\ref{validity-of-the-paired-versions-without-human-raters} and Appendix~\ref{model-assisted-screen} describe these screens and their uncertainty. They provide automated screening evidence, with no human equivalence assessment.
+
+\hypertarget{results}{%
+\section{Results}\label{results}}
+
+Models are given in the order ALLaM, Fanar, Qwen3 and Gemma throughout; their MSA accuracies are 0.59, 0.61, 0.63 and 0.59. The held-out test follows the pattern observed in development, with narrower intervals. A separate implementation reproduced P1 exactly and closely reproduced the main S4 and P2 results; Appendix~\ref{independent-computational-check} reports the boundary differences and the scope of this check.
+
+\hypertarget{confirmatory-results-1420-held-out-questions}{%
+\subsection{Confirmatory results (1,420 held-out questions)}\label{confirmatory-results-1420-held-out-questions}}
+
+Under the MSA-calibrated threshold for a 20\% target (S4; Figure~\ref{fig:s4}), MSA users receive an answer on 0.52 / 0.56 / 0.59 / 0.47 of the questions at a realised risk of 0.21 / 0.19 / 0.20 / 0.18. Table~\ref{tab:2} gives the dialect users' side.
+
+\begin{table}[!htbp]\footnotesize\setlength{\tabcolsep}{4pt}
+\caption{S4 at the MSA-calibrated threshold (target 0.20): paired differences in answered fraction, realised risk for the dialect user, and the cells in which the paired risk difference against MSA excludes zero (fixed-calibration bootstrap). Within each numeric cell, the first line gives ALLaM / Fanar and the second Qwen3 / Gemma. Risk differences in the final column are in percentage points.}\label{tab:2}
+\begin{tabular}{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.0698}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2791}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2791}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3721}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Var.
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+$\Delta$ answered fraction vs MSA
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+realised risk for the dialect user
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+$\Delta$ risk vs MSA with CI excluding 0
+\end{minipage} \\
+\midrule\noalign{}
+MAG & \begin{tabular}[t]{@{}l@{}}$-$0.11 / $-$0.15\\$-$0.21 / $-$0.18\end{tabular} & \begin{tabular}[t]{@{}l@{}}0.28 / 0.21\\0.24 / 0.17\end{tabular} & ALLaM +6.7 {[}+3.1, +10.1{]}; Qwen3 +3.5 {[}+0.3, +7.0{]}; not Fanar, not Gemma (2/4) \\
+SYR & \begin{tabular}[t]{@{}l@{}}$-$0.05 / $-$0.13\\$-$0.12 / $-$0.12\end{tabular} & \begin{tabular}[t]{@{}l@{}}0.31 / 0.23\\0.23 / 0.22\end{tabular} & +9.3 / +3.7 / +3.1 / +4.2 points (4/4) \\
+EGY & \begin{tabular}[t]{@{}l@{}}$-$0.04 / $-$0.08\\$-$0.06 / $-$0.07\end{tabular} & \begin{tabular}[t]{@{}l@{}}0.25 / 0.21\\0.22 / 0.22\end{tabular} & ALLaM, Gemma (2/4) \\
+KSA & \begin{tabular}[t]{@{}l@{}}$-$0.05 / $-$0.07\\$-$0.07 / $-$0.07\end{tabular} & \begin{tabular}[t]{@{}l@{}}0.24 / 0.22\\0.20 / 0.21\end{tabular} & Gemma (1/4) \\
+UAE & \begin{tabular}[t]{@{}l@{}}$-$0.01 / $-$0.05\\$-$0.05 / $-$0.03\end{tabular} & \begin{tabular}[t]{@{}l@{}}0.26 / 0.20\\0.21 / 0.19\end{tabular} & ALLaM (1/4) \\
+\bottomrule\noalign{}
+\end{tabular}
+\end{table}
+
+The answered-fraction difference excludes 0 in 19 of 20 cells (all but ALLaM--UAE), with or without calibration resampling. The paired risk difference against MSA excludes 0 for Syrian in four models (three under calibration resampling, where Gemma's interval comes to include 0) and for Moroccan in two (ALLaM and Qwen3, both ways). Only in those cells do we speak of a ``double penalty'', meaning fewer answers and a higher error rate than MSA. Whether the 20\% target itself is exceeded is a separate question. Point estimates lie above 0.20 in 18 of 20 dialect cells (Qwen3--Saudi by 0.0003), but with the fixed-calibration interval only ALLaM's five dialects exceed it with confidence (0.24$-$0.31), and under calibration resampling only ALLaM--Moroccan and ALLaM--Syrian do. MSA's own realised risk is 0.213 for ALLaM and 0.200 for Qwen3, a reminder that the rule targets an empirical risk on 808 calibration items and that the test realisation can sit above the target for MSA as well.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\textwidth,height=0.43\textheight,keepaspectratio]{figures/fig1_s4_transfer.pdf}
+\caption{S4: an abstention threshold chosen on MSA calibration data for a 20\% target risk, applied unchanged to every variety (1,420 test keys). Each point is one variety's answered fraction and realised risk, with 95\% key-bootstrap intervals (threshold fixed); the hollow square is MSA and the dashed line the target. $\tau_{\mathrm{MSA}}$ is given per model.}
+\label{fig:s4}
+\end{figure}
+
+At the risk attained by MSA when answering half the questions (P1; Table~\ref{tab:p1full} and Figures~\ref{fig:p1} and~\ref{fig:curves}), the Moroccan versions are answerable on 0.23$-$0.32 of the questions across the four models ($\Delta$ $-$0.18 to $-$0.27), the Syrian on 0.31$-$0.34 ($\Delta$ $-$0.16 to $-$0.19), the Egyptian on 0.35$-$0.41 ($-$0.09 to $-$0.15), the Saudi on 0.37$-$0.44 ($-$0.06 to $-$0.13) and the Emirati on 0.42$-$0.44 ($-$0.06 to $-$0.08). All 20 intervals exclude 0. Since P1 and S4 are different operating points, the two sets of differences are not directly comparable.
+
+For conformal sets at $\alpha$ = 0.30 (P2; Figure~\ref{fig:p2} and Table~\ref{tab:p2coverage}), coverage under the MSA quantile falls by 8$-$13 points for MAG and by 6$-$9 points for SYR, with the other dialects losing 3$-$5 points. A per-variety quantile at the same nominal target produced sets $\times$1.17$-$1.32 for MAG, $\times$1.18$-$1.23 for SYR and $\times$1.08$-$1.17 for the Gulf varieties. The double-resampled intervals for these ratios are 2.7$-$4.3 times wider than the fixed-calibration ones and still exclude 1 in all 20 cells, although the target was not met empirically in every cell (Table~\ref{tab:p2coverage}). At $\alpha$ = 0.10 the coverage differences are at most 1.7 points and 19 of 20 intervals include 0, so the phenomenon belongs to the operating range we studied rather than to every target.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\textwidth,height=0.43\textheight,keepaspectratio]{figures/fig3_p2_conformal.pdf}
+\caption{P2: split-conformal sets at $\alpha$ = 0.30 (nominal coverage 0.70). Top: coverage lost on each dialect under the MSA quantile. Bottom: the set size each dialect's own quantile produced at the same nominal target, relative to MSA. Thick bars: 95\% intervals with the calibration sample fixed; thin bars: calibration and test keys resampled with the quantile re-selected.}
+\label{fig:p2}
+\end{figure}
+
+Variety-aware calibration (S2; $\alpha$ = 0.30, MAG, target 0.70, equal calibration keys per variety; Table~\ref{tab:s2full}) raises coverage from 0.57$-$0.62 under the MSA quantile to 0.62$-$0.65 with a pooled calibration set, to 0.63$-$0.68 with a character n-gram variety classifier, and to 0.66$-$0.69 with the true variety label (Mondrian), while the mean set size grows from 1.14$-$1.44 to 1.53$-$1.72. The text classifier recovers 51$-$88\% of the oracle's gain, least in ALLaM and most in Gemma. ALLaM--MAG stays below the target even with the true label (0.657). Variability of the calibration sample is a possible explanation (an exploratory resampling of the calibration part gives 0.63$-$0.70), though not an established one.
+
+AraDiCE also shows lower accuracy, answerable fraction and transferred-set coverage for Egyptian and Levantine than for MSA (Section~\ref{validity-of-the-paired-versions-without-human-raters}).
+
+\hypertarget{validity-of-the-paired-versions-without-human-raters}{%
+\subsection{Validity of the parallel items}\label{validity-of-the-paired-versions-without-human-raters}}
+
+The comparisons above assume that a dialect version asks the same question as its MSA original. We assessed this assumption using an LLM-based equivalence screen and complementary sensitivity analyses; no human equivalence ratings were available.
+
+In a model-assisted screen, 400 pairs (80 keys $\times$ 5 dialects, of which 50 development and 30 test keys; 150 double-rated) were judged by GPT-6 Astra Extra High in two separate sessions, with a third session as adjudicator (Appendix~\ref{model-assisted-screen}). The screen's basic flag is a negative judgement on either meaning preservation (a changed condition, quantity or term) or the validity of the answer and options. This composite flag was raised on 0.37 {[}0.31, 0.43{]} of the pairs (UAE 0.44, EGY 0.33). The answer or options were judged invalid on 0.08 (MAG 0.16), and a hint or an ambiguity was judged to have been added on 0.34. Because the answer-validity judgement was ``unsure'' on 29\% of pairs, the complement of the 0.08 is not a confirmed-valid rate. Agreement between the two sessions was $\kappa$ = 0.86 for meaning, 0.36 for answer validity (mostly ``yes'' against ``unsure'') and 0.90 for clarity \cite{cohen1960kappa}. These figures measure the consistency of one model with itself and are not inter-annotator agreement. The screen's criteria and sampling frame differ from the resource authors' 32-item check. Its flag rates are therefore not directly comparable with that check and do not estimate the resource's error rate.
+
+Whether the flags fall where the models fail could not be settled on this sample. On 1,600 pair $\times$ model observations, accuracy dropped by 4.5 points on unflagged pairs and by 6.2 on flagged ones (difference $-$1.8 {[}$-$8.2, +5.1{]}), and the answer changed in 26.9\% against 27.7\%. The two are not detectably different, but the interval is wide enough to allow a material association. After excluding flagged pairs on the 80 audited keys, answered-fraction differences averaged across models remained negative ($-$6 to $-$20 percentage points). P1 estimates were much less precise; Moroccan interval widths ranged from 38 to 94 points. The worst-case bound for fixed-rule proportions, $f/(1-f)$, is uninformative at these flag rates.
+
+Three automatic layers were specified after the main results and before their computation (Addendum 4). The first (L1) is the external filter. Its screening pool was selected from items that strong baselines answered wrongly rather than from a random sample. Of the 935 dialect rows that three LLM judges flag unanimously in the resource \cite{ifm2026verified}, 387 fall on test keys (5$-$6\% per dialect). Dropping each flagged key from the dialect and from its paired MSA comparison changes every endpoint by at most 1.5 points ($\Delta$P1, ALLaM--Syrian), and most by less than one point, in all 20 dialect $\times$ model cells. The second (L2) is a similarity covariate. The cost varies with embedding similarity to the MSA text (multilingual-e5-large \cite{wang2024multilinguale5}) in every cell, and the most similar tercile retains at least two thirds of the full-sample effect for MAG, SYR and EGY in three of four models, and for KSA and UAE in at most one. The pattern is descriptive, since similarity may reflect both linguistic differences and item difficulty. The third (L4) is the second resource. On AraDiCE (1,400 test items; machine translation with human post-editing) accuracy drops by 3.6$-$7.0 points, the MSA-matched answerable fraction by 11$-$17 points for EGY and 6$-$14 for LEV, and coverage under the MSA quantile by 3$-$7 points, with intervals below zero in all eight cells for accuracy, answerable fraction and coverage, and set sizes grow $\times$1.02$-$1.28 (point estimates; no interval was computed for the ratios in this layer). The recurrence of these gaps under a different translation pipeline speaks against translation artefacts as the whole explanation, but it cannot exclude artefacts shared by both pipelines, and it says nothing about Moroccan, which AraDiCE does not cover.
+
+The gaps persisted across the two resources and the specified automatic sensitivity analyses. These checks reduce reliance on any one translation pipeline or filter, but undetected meaning differences may still contribute to the measured gaps. The available human validity evidence comes from the resources' translation and post-editing procedures.
+
+\hypertarget{diagnostic-views}{%
+\subsection{Diagnostic views}\label{diagnostic-views}}
+
+The views in this section were specified after the confirmatory results and before they were computed (Table~\ref{tab:1}). They describe the same 1,420 test keys from three angles and are not additive components, so we do not attribute a share of the gap to any one of them.
+
+Dialect accuracy is lower in every cell (Table~\ref{tab:accuracyfull}): against 0.59$-$0.63 on MSA, the models reach 0.49$-$0.53 on Moroccan and 0.50$-$0.58 on Syrian versions.
+
+Choosing the S4 threshold on each variety's own calibration items instead of MSA's, with the same rule and the same target of 0.20, and applying it to that variety's test items gives a realised risk of 0.16$-$0.24 across the 20 cells (against 0.17$-$0.31 under the transferred MSA threshold), while reducing the answered fraction in 17 of 20 cells, with intervals below zero for those contrasts (Figure~\ref{fig:d4}). The other three cells have higher answered fractions after re-selection (Fanar--EGY, Gemma--KSA and Gemma--UAE). The residual gap to MSA at the same nominal target is $-$0.01 to $-$0.34, with CI \textless{} 0 in 19 of 20 cells when the calibration sample is held fixed and in 14 of 20 under double resampling (Section~\ref{robustness-of-the-measurement}). As a post-hoc descriptive summary, we count cells above the target ceiling rather than measuring their distance from it. Under the transferred threshold the realised risk lies above 0.20 in 18 of 20 dialect cells (point estimates) and above 0.24 in four, all of them ALLaM. Under the re-selected threshold it lies above 0.20 in 7 cells and above 0.24 in none. Where the transferred threshold was already near the ceiling, re-selection mostly traded answers for small changes in risk (Qwen3--EGY, for instance: risk 0.22 $\rightarrow$ 0.17, answered 0.53 $\rightarrow$ 0.42). The realised risks under $\tau_v$ happen to fall within $\pm$0.04 of 0.20, but that is the observed range, not a tolerance or a guarantee.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\textwidth,height=0.43\textheight,keepaspectratio]{figures/fig2_d4_adaptation.pdf}
+\caption{D4: re-selecting the threshold on each dialect's own calibration items (same rule, same target). Each arrow runs from the operating point under the transferred MSA threshold (hollow marker) to the one under the re-selected threshold (filled); vertical bars are the 95\% interval of the realised risk at $\tau_v$; the hollow square is MSA under its own threshold.}
+\label{fig:d4}
+\end{figure}
+
+\begin{table}[!htbp]\footnotesize\setlength{\tabcolsep}{4pt}
+\caption{$\Delta$AUROC (variety -- MSA), $p_{\max}$ as the score, paired by key, with 95\% intervals.}\label{tab:3}
+\begin{tabular}{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.0769}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.2051}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.2051}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.2051}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.2051}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1026}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+ALLaM
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Fanar
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Qwen3
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Gemma
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+CIs excluding 0
+\end{minipage} \\
+\midrule\noalign{}
+MAG & $-$0.045 {[}$-$.072, $-$.015{]} & $-$0.040 {[}$-$.063, $-$.014{]} & $-$0.059 {[}$-$.087, $-$.032{]} & $-$0.029 {[}$-$.057, $-$.001{]} & 4/4 \\
+SYR & $-$0.056 {[}$-$.084, $-$.028{]} & $-$0.038 {[}$-$.063, $-$.012{]} & $-$0.065 {[}$-$.091, $-$.039{]} & $-$0.036 {[}$-$.063, $-$.009{]} & 4/4 \\
+EGY & $-$0.023 {[}$-$.050, +.002{]} & $-$0.037 {[}$-$.060, $-$.015{]} & $-$0.031 {[}$-$.055, $-$.008{]} & $-$0.020 {[}$-$.044, +.005{]} & 2/4 \\
+KSA & $-$0.012 {[}$-$.037, +.011{]} & $-$0.033 {[}$-$.057, $-$.010{]} & $-$0.015 {[}$-$.037, +.006{]} & $-$0.027 {[}$-$.050, $-$.004{]} & 2/4 \\
+UAE & +0.002 {[}$-$.022, +.026{]} & $-$0.013 {[}$-$.035, +.010{]} & $-$0.014 {[}$-$.039, +.009{]} & $-$0.005 {[}$-$.028, +.018{]} & 0/4 \\
+\bottomrule\noalign{}
+\end{tabular}
+\end{table}
+
+MSA AUROC is 0.77$-$0.80. On Moroccan and Syrian versions the confidence score separates correct from incorrect answers less well in all four models, on Egyptian and Saudi in two of four, and on Emirati the difference is not detectable on this sample (Table~\ref{tab:3}). AUGRC \cite{traub2024overcoming}, which combines accuracy and ranking, is worse than MSA in all 20 cells. These differences are subject to the same questions of pair and label validity as everything else (Section~\ref{validity-of-the-paired-versions-without-human-raters}), and they do not show that every threshold, or a different confidence score, would fail.
+
+\hypertarget{robustness-of-the-measurement}{%
+\subsection{Robustness of the measurement}\label{robustness-of-the-measurement}}
+
+The robustness protocol was specified before the robustness scoring for option order and answer extraction, and before computation for calibration sensitivity. It uses 500 test keys drawn by seed and four cyclic rotations of the options, so that each option visits each position while the demonstrations keep their order, with the main prompt template and scoring procedure, changing only the order of the query options. Re-scoring the original order reproduced the confirmatory prediction in 98$-$99\% of cells. The 0.9$-$2.0\% of cells that differ sit at near-ties (median top-two letter log-probability margin at most 0.13 nats, against 0.5$-$1.75 overall; 43$-$52\% of them below 0.05 nats), and the gap estimates from the two runs differ by at most 0.03. This rate of choice differences is consistent with the numerical non-determinism of bf16 inference under different batch composition, but we did not isolate the cause experimentally, and two runs indicate the precision of the measurement rather than a general bound.
+
+The accuracy and answered-fraction gaps persist under the four rotations (Figure~\ref{fig:rotation}). $\Delta$accuracy and $\Delta$P1 (variety -- MSA) keep their sign in all four orderings and their order-averaged intervals exclude 0 in all 20 dialect $\times$ model cells. The order-averaged $\Delta$P1 lies between $-$0.21 and $-$0.25 for MAG, $-$0.19 and $-$0.25 for SYR, $-$0.13 and $-$0.15 for EGY, $-$0.10 and $-$0.15 for KSA, and $-$0.08 and $-$0.13 for UAE (Table~\ref{tab:rotationgaps}). With calibration fixed, the order-averaged S4 difference at the original MSA threshold excludes zero in all 20 cells; under calibration resampling it does so in 19, with ALLaM--UAE unresolved. Four rotations balance option positions, but they do not test all 24 permutations and do not rule out an interaction between dialect and order.
+
+Order sensitivity itself rises under dialectal phrasing. The share of keys whose chosen option changes across the four orderings is 0.43$-$0.58 for MSA, 0.51$-$0.72 for MAG and 0.52$-$0.70 for SYR, the highest value in each case being Gemma's (Table~\ref{tab:ordersensitivity}). The difference from MSA excludes 0 for MAG, SYR and EGY in all four models, for KSA in three and for UAE in one, and English is lower than MSA in all four. This is a secondary, correlational observation that mirrors the accuracy and AUROC gaps.
+
+We withdraw the interpretation of P3 alone as evidence of dialect-specific instability. Answers change between dialect and MSA versions in 20--34\% of items (P3), while a single option rotation within the same variety changes them in 24--48\% (27--38\% for MSA). The paired difference between these rates is negative with its interval below zero in 15 of 20 dialect--model cells; the other five intervals include zero. Against MSA's own rotation-change rate, the between-version change is larger for ALLaM on Moroccan (+0.06 [+0.01, +0.11]) and Syrian (+0.05 [+0.00, +0.10]). The negative result is retained alongside the two positive contrasts against the MSA rotation reference. Appendix~\ref{robustness-tables} reports the paired differences and the two reference comparisons.
+
+Greedy generation from the same prompt generally agrees with letter scoring. With a limit of 8 generated tokens, agreement among extractable answers is 97--100\% for ALLaM, 94--97\% for Fanar, 94--96\% for Qwen3 and 90--97\% for Gemma; at most 0.8\% are unextractable. Generated-answer accuracy is within 0.014 of letter-logit accuracy in every cell. For ALLaM under its chat template (at most 32 tokens, fixed extraction rules), at most 0.4\% are unextractable, generated answers agree with the chat-prompt first-token choice in 99--100\%, and agreement with the raw-prompt choice is 82--92\%. Generated accuracy (0.53--0.66) follows the raw-prompt dialect ordering on these same 500 keys. On the accepted subset of the 500 robustness keys, generated-answer selective risk equals letter-logit selective risk in 27 of 28 model--variety cells; the remaining difference is $-0.0027$ for Fanar--English. This comparison concerns aggregate risk under the tested option-letter prompts; free-form dialectal responses were not evaluated.
+
+Calibration resampling has different effects across quantities (Figure~\ref{fig:widths}). With calibration and test keys sampled independently and policies re-selected in each of 1,000 replicates, S4 answered-fraction intervals remain below zero in 19 of 20 cells and conformal coverage-difference intervals in all 20. Their widths are 0.95--1.4 times those with calibration fixed. On the rotation subset, the order-averaged S4 count changes from 20 to 19 cells, with ALLaM--UAE becoming unresolved. Set-size-ratio intervals widen 2.7--4.3 times and still exclude 1 in all 20 cells. Residual answered-fraction gaps after per-dialect threshold selection remain resolved in 14 of 20 cells; the six whose intervals include zero are Fanar--EGY, Fanar--UAE, Qwen3--KSA, Qwen3--UAE, Gemma--EGY and Gemma--UAE. Those intervals are 2.2--4.5 times wider. The appendix reports both uncertainty estimates for set-size ratios and residual gaps.
+
+\hypertarget{discussion}{%
+\section{Discussion}\label{discussion}}
+
+\hypertarget{the-findings-in-relation-to-previous-work}{%
+\subsection{The findings in relation to previous work}\label{the-findings-in-relation-to-previous-work}}
+
+Jones et al. \cite{jones2021selective} showed that selective classification can magnify disparities between groups. Our evaluation examines a related transfer setting: a policy selected on MSA and applied unchanged to parallel dialectal versions. The disparity affects both service and reliability in some cells, but the two outcomes do not always move together. Syrian versions have lower answered fractions and higher realised risk than MSA in four models with calibration fixed and three under calibration resampling; the corresponding Moroccan comparison holds in two models under either analysis. Gulf varieties show more consistent reductions in answered fraction than increases in risk. A post-hoc count summarises the change in operating points: observed target exceedances fall from 18 to 7 cells, while answered fraction falls in 17 cells and rises in three. Residual gaps compare policies at the same nominal target, not at equal achieved risk.
+
+The conformal results concern a separate policy. Group-conditional calibration \cite{vovk2012conditional, romano2020malice} targets marginal coverage within a group under the required exchangeability conditions; it does not ensure that every finite test sample reaches the target. Here, own-variety quantiles increase set sizes relative to MSA, while some test coverage values remain below 0.70. Kamath et al. \cite{kamath2020selective} studied selective question answering under domain shift, and Ahuja et al. \cite{ahuja2022calibration} studied calibration transfer across languages. The present findings extend the empirical comparison to written varieties within Arabic, using parallel questions to hold item identity constant. Differences in tasks, models and operating targets prevent a direct comparison of effect magnitudes across these studies.
+
+Option-order sensitivity is well documented \cite{zheng2024robust, pezeshkpour2024sensitivity}. In these data, order-sensitivity rates are higher for Moroccan and Syrian than for MSA in all four models. Egyptian point estimates are also higher, although the ALLaM interval reaches zero. The paired rotation comparison also shows why answer changes between parallel versions cannot by themselves identify a dialect-specific instability. Kantharuban et al. \cite{kantharuban2023quantifying} related dialect performance gaps to linguistic distance and other factors. Our embedding-similarity analysis offers a descriptive comparison within the parallel items, although similarity is not an independent measure of dialectal distance and may also reflect item difficulty.
+
+\hypertarget{what-the-results-mean-for-systems-that-abstain-on-a-confidence-score}{%
+\subsection{Implications for selective answering}\label{what-the-results-mean-for-systems-that-abstain-on-a-confidence-score}}
+
+For Arabic systems using confidence-based abstention, the results support evaluating the transferred policy on held-out questions from each dialect served. The evaluation should report both the fraction answered and the error rate among accepted answers. Per-dialect calibration can reduce risk exceedances, but it also changes how many questions receive an answer. Selection uncertainty matters when comparing these policies, particularly for the residual gaps after adaptation. The risk target remains an upper bound sought by the policy, rather than a value that a safe system must approach.
+
+\hypertarget{limitations}{%
+\subsection{Limitations}\label{limitations}}
+
+The main limitation is uncertainty about meaning equivalence between the parallel versions. DAMM uses human translation and AraDiCE uses human post-editing, but our own equivalence screen had no human assessment. Its composite flag rate was 37\%, and its answer-validity negative rate was 8\%; these are model judgments under the screening criteria, not resource error rates. Gaps remained among unflagged pairs, after applying the external filter and on the second resource. This reduces reliance on any one filter or translation pipeline, while leaving undetected meaning differences as a possible contributor to the observed gaps, including those in AUROC. Some screened subsets also yield wide intervals. The study therefore measures reliability differences between the published versions; it does not isolate a pure effect of dialect.
+
+The evaluation uses multiple-choice questions, option-letter scoring and four checkpoints of 7--9B parameters from three base families; Fanar-1-9B continues pre-training of Gemma-2-9B. Generation generally agrees with letter scoring under the common raw prompt, and ALLaM's chat-template results retain the raw-prompt dialect ordering on the 500-key subset. These checks cover the tested answer format and prompts, rather than free-form dialectal responses, larger models or instruction-tuned versions of the base checkpoints. The four cyclic rotations balance option positions but leave 20 permutations untested, so an interaction between dialect and order remains possible.
+
+The main intervals hold calibration fixed. Resampling calibration preserves the 19-of-20 count for S4 answered-fraction gaps and the 20-of-20 count for conformal coverage losses, but widens set-size-ratio intervals by 2.7--4.3 times. Six of the 20 residual-gap intervals after per-dialect threshold selection then include zero. AraDiCE replicates the Egyptian and Levantine pattern; the Moroccan result rests on DAMM alone. The diagnostics, robustness checks and verification analyses were specified after the confirmatory results were known, with the timing of each computation and the post-hoc summaries distinguished in Table~\ref{tab:1} and Appendix~\ref{plan-history-and-freeze-log}.
+
+The analyses evaluate one confidence score and threshold rule alongside the specified conformal policies. They do not identify a causal mechanism or establish how alternative confidence scores and selection rules would perform.
+
+\hypertarget{future-work}{%
+\subsection{Future work}\label{future-work}}
+
+The most useful next step is a human equivalence review of a sample of pairs, selected without reference to model behaviour and rated blind to it, so that the validity layers of Section~\ref{validity-of-the-paired-versions-without-human-raters} can be anchored. Beyond that, the same design can be applied to other confidence scores (verbalised confidence, semantic uncertainty over sampled answers) and to other abstention rules, to instruction-tuned versions of the base models and to larger models, and to free-form answering with a generation-based correctness judgement. On the conformal side, methods designed for covariate shift and for coverage across groups could be compared with the Mondrian baseline on the same data. A public pre-registration would make the timing record stronger than the local one we kept.
+
+\hypertarget{conclusions}{%
+\section{Conclusions}\label{conclusions}}
+
+MSA-calibrated policies produce uneven risk and coverage across the dialectal versions studied here. They answer fewer dialect questions in all 20 model--dialect cells, with 19 answered-fraction intervals below zero under either uncertainty analysis. Higher risk relative to MSA is supported for Syrian in four models with calibration fixed and three under calibration resampling, and for Moroccan in two under either analysis. Exceedance of the 20\% target is supported for ALLaM on all five dialects with calibration fixed, and on Moroccan and Syrian under calibration resampling. Exploratory per-dialect threshold selection often trades answered fraction for lower realised risk; per-dialect conformal calibration produces larger sets at the same nominal coverage target. The remaining gaps and lower confidence discrimination on Moroccan and Syrian versions show why risk and coverage should be evaluated together. The evidence concerns two multiple-choice resources and includes no human validation of equivalence in our screened sample. For systems using comparable policies, the practical implication is to evaluate each served dialect on held-out data rather than infer its operating point from MSA calibration.
+
+\vspace{6pt}
+\supplementary{The repository contains the analysis plan and dated addenda, code and file hashes, model scores, result tables, split keys, computational checks and plotting scripts: \url{https://github.com/FahadGhamdi/arabic-dialect-abstention}, commit \texttt{8e103a0} (accessed on 8 November 2026). The accompanying manuscript source archive includes generated tables and their file index (\nolinkurl{docs/FILE_INDEX.md}). The supplementary reproducibility archive adds text-free screening ratings, reconstruction scripts, corrected checksums and the submission audit. Source dataset texts remain available from their publishers under their own terms.}
+
+\funding{This research received no external funding.}
+\institutionalreview{Not applicable: the study used published datasets and model outputs only and involved no human participants.}
+\informedconsent{Not applicable.}
+\dataavailability{Stored model scores, aggregate results, split keys and analysis code are available at \url{https://github.com/FahadGhamdi/arabic-dialect-abstention}, commit \texttt{8e103a0} (accessed on 8 November 2026). The supplementary reproducibility archive includes the additional screening ratings and scripts used for this version. The source datasets are available from their publishers \cite{altakrori2026dialectalarabicmmlu, mousi2025aradice, koto2024arabicmmlu}. Re-running the text-based variety router and generated-answer mapping also requires dataset texts; reproducing inference requires the models. The original weight revisions and full inference environment were not pinned.}
+\acknowledgments{During preparation of the study and manuscript, the author used Claude Fable 5.1 (Anthropic; \nolinkurl{claude-fable-5-1}) through Claude Code for programming, local scoring, plotting, record keeping and drafting, and OpenAI tools (ChatGPT and Codex; GPT-6 Astra where recorded) for methodological review, numerical checks and revision. GPT-6 Astra Extra High was used for the equivalence screen. Versions were not recorded for every earlier session. The author reviewed and edited the outputs and takes full responsibility for the publication.}
+\conflictsofinterest{The author declares no conflicts of interest.}
+
+\appendixtitles{yes}
+\appendixstart
+\appendix
+\hypertarget{plan-history-and-freeze-log}{%
+\section{Plan history and freeze log}\label{plan-history-and-freeze-log}}
+
+Table~\ref{tab:history} summarises the recorded analysis chronology. Times are local entries in the project log rather than independently certified timestamps. The plan was first written during score collection and before the recorded confirmatory analysis. Versions v1--v3 are described in the plan history; versions v4--v11 are archived. Later addenda distinguish analyses specified before their computation from post-hoc summaries. Historical documents retain their original wording; this manuscript distinguishes the model-assisted screen from human annotation.
+
+\begingroup
+\fontsize{9}{11}\selectfont\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.04}
+\setlength{\LTleft}{0pt plus 1fill}\setlength{\LTright}{0pt plus 1fill}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.20\textwidth}>{\raggedright\arraybackslash}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.30\textwidth}>{\raggedright\arraybackslash}p{\dimexpr0.37\textwidth-6\tabcolsep\relax}@{}}
+\caption{Recorded analysis chronology, 4--8 November 2026 (local times).}\label{tab:history}\\
+\toprule
+Record & Recorded time & Content & Data status \\
+\midrule
+\endfirsthead
+\multicolumn{4}{l}{\small\itshape Table~\thetable\ (continued)}\\
+\toprule
+Record & Recorded time & Content & Data status \\
+\midrule
+\endhead
+\midrule\multicolumn{4}{r}{\small\itshape Continued on next page}\\\endfoot
+\bottomrule\endlastfoot
+Splits and scoring scripts frozen & 4 Nov, 20:50$-$20:55 & confirmatory\_splits.json (sha256 f0bfc16b\ldots), scoring script and runner & before scoring started (20:57) \\
+Plan v1; analysis code v1 frozen & 4 Nov, $\approx$21:30 & endpoints P1--P3 and S1--S3, decision rule, reporting rules; confirm\_analyze v1 (d1b3396d\ldots) & ALLaM about half scored; no score file read \\
+Addendum 1; code v2 frozen & 4 Nov, $\approx$23:30 & freeze log; single decision rule; interpretation limits; S4 added (8ade05cd\ldots) & ALLaM complete, Qwen3 about 30\%; no confirmatory file opened for analysis \\
+Confirmatory analysis run & 5 Nov, 08:10 & results/confirm/ from code v2 & scoring complete \\
+Addendum 2 & 5 Nov, $\approx$11:30 & sensitivity plan for the equivalence screen; reporting rules & main results seen; no screen data existed \\
+Addendum 3 & 7 Nov (early) & execution note for the screen analyses; no rule changed & screen returned \\
+Addendum 4; validity code frozen & 7 Nov, 03:00$-$03:30 & automatic validity layers L1, L2, L4 (and L5); validity\_analyze (2ec539c6\ldots) & written before computation; the plan header reads ``$\approx$23:50'', inconsistent with the log entry at 03:00$-$03:30 and the Addendum 5 execution note at 05:45; both records are retained \\
+Addendum 5 & 7 Nov, 05:45 & execution note for Addendum 4; no rule changed & layers computed \\
+Addendum 6 & 7 Nov & wording rules after external review; no analysis changed & --- \\
+Addenda 7$-$8; diagnostic and robustness code frozen & 7 Nov, $\approx$06:45 & diagnostic views (D1--D4); rotation, generation and re-scoring protocol (9337bf5b\ldots, 5306e881\ldots) & before the robustness scoring \\
+Addendum 9; verification code frozen & 7 Nov, $\approx$17:55 & double resampling, paired rotation comparison, independent implementation (3973de30\ldots) & before computation \\
+Addendum 10; supplement code frozen & 8 Nov, $\approx$01:35 & risk differences and exceedance; generated-answer selective risk (9d737d20\ldots) & before computation \\
+Reporting correction & 8 Nov & plug-in point estimates for the P1, S4 and P2 contrasts (Appendix~\ref{independent-computational-check}); no code or result file changed & after manuscript review \\
+\end{longtable}
+\endgroup
+
+\section{Results, operating points and uncertainty}\label{full-tables-and-curves}
+
+The tables report observed-sample estimates and pointwise 95\% intervals. Fixed-calibration intervals resample test keys only; double-resampled intervals also resample calibration keys and re-select the policy, retaining pairing across varieties. Both intervals accompany the same observed-sample estimate. Tables~\ref{tab:p1full}--\ref{tab:p2size} give P1 and P2 estimates, Table~\ref{tab:s2full} compares calibration strategies, and Table~\ref{tab:accuracyfull} reports accuracy and discrimination. Tables~\ref{tab:s4answers} and~\ref{tab:s4risk} report S4 differences; Tables~\ref{tab:d4points} and~\ref{tab:d4gaps} report per-dialect threshold selection, and Table~\ref{tab:aradice} gives the AraDiCE results. The supplementary CSV files contain English controls and all computed secondary targets.
+
+\input{generated/p1full.tex}
+
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth,height=0.43\textheight,keepaspectratio]{figures/figP1_matched_risk.pdf}
+\caption{P1 sample differences from the actual MSA answerable fraction, with 95\% percentile intervals. MSA P1 is approximately 0.50; the risk reference is defined at 50\% answered.}\label{fig:p1}
+\end{figure}
+
+\input{generated/p2coverage.tex}
+
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth,height=0.43\textheight,keepaspectratio]{figures/figA_risk_coverage.pdf}
+\caption{Risk--coverage curves on the 1,420 test keys. Markers indicate S4 operating points; the dotted horizontal line is the risk at MSA 50\% coverage used as the P1 reference.}\label{fig:curves}
+\end{figure}
+
+\input{generated/p2size.tex}
+
+\input{generated/s2full.tex}
+
+\input{generated/accuracyfull.tex}
+
+\input{generated/s4answers.tex}
+
+\input{generated/s4risk.tex}
+
+\input{generated/d4points.tex}
+
+\input{generated/d4gaps.tex}
+
+\input{generated/aradice.tex}
+
+The supplementary result grids contain the remaining operating points: all four S4 target risks, eight P2 error levels, both S2 error levels and all seven varieties. D1/D2 contains the discrimination estimates, D4 the adaptation results, and S91 the calibration-resampling results at the principal targets. L1 and L2 contain the external-filter and embedding-stratified analyses. The file index (\nolinkurl{docs/FILE_INDEX.md}) in the supplementary source archive maps these tables to their archived CSVs.
+
+\FloatBarrier
+\section{Computational verification and numerical precision}\label{independent-computational-check}
+
+A separate implementation computed P1, S4 and P2 from the written metric definitions and stored scores without consulting the original analysis code or reports, according to the archived comparison record. Table~\ref{tab:indep} summarises the agreement. This checks implementation of the metrics on shared inputs; it does not independently validate model scoring or equivalence of the question versions.
+
+\input{generated/indep.tex}
+
+The main analysis uses stored $p_{\max}$ and $p_{\mathrm{true}}$ values rounded to five decimals, whereas the separate implementation primarily reconstructs them from letter log-probabilities rounded to four decimals. Near-tied calibration items can therefore change rank or cross a threshold. P1 and S4 use NumPy's default sort; AUGRC uses a stable sort. Acceptance includes all items tied at the chosen threshold. The archived clean-folder check reported 51 of 57 files identical or numerically equal. A further submission audit reproduced the S4, P2 and S2 result tables, P1 point estimates and D4 results at the primary 0.20 target. Some resampled intervals and secondary D4 operating points differed across environments; the supplementary audit records these differences, including a 0.020 change in one secondary-target risk estimate. These checks concern stored inputs. Full-precision scores, explicit tie handling and a pinned software environment would improve future reproducibility.
+
+The earlier draft displayed bootstrap-mean contrasts. Following a Codex-assisted numerical check, these were corrected to observed-sample differences, such as $A_v-A_{\mathrm{MSA}}$ for P1, while retaining the original percentile bootstrap intervals. Six P1 values change at two-decimal display precision: ALLaM--EGY ($-0.10$ to $-0.09$), Fanar--MAG ($-0.20$ to $-0.21$), Fanar--SYR ($-0.17$ to $-0.16$), Qwen3--EGY ($-0.11$ to $-0.10$), Gemma--SYR ($-0.19$ to $-0.18$) and Gemma--UAE ($-0.08$ to $-0.06$). For Gemma--UAE, the sample difference is $0.437324-0.501408=-0.064085$; the mean bootstrap difference is $-0.077917$. These estimators need not coincide because the largest admissible prefix is a nonlinear statistic. S4 answered-fraction and P2 coverage contrasts are also computed from the sample quantities. The reporting history preserves the former centres; raw scores and thresholds are unchanged, as are the P1, S4 and P2 interval endpoints.
+
+Archived source documents the prompt, candidate-letter aggregation, sorting and stored precision. The model identifiers are \nolinkurl{ALLaM-AI/ALLaM-7B-Instruct-preview}, \nolinkurl{QCRI/Fanar-1-9B}, \nolinkurl{Qwen/Qwen3-8B-Base} and \nolinkurl{google/gemma-2-9b}. Original immutable model revisions and a complete dependency lock were not recorded.
+
+\FloatBarrier
+\section{Measurement robustness}\label{robustness-tables}
+
+The robustness subset contains 500 test keys and four cyclic option rotations. The tables distinguish changes in selected options, differences averaged across rotations, agreement between answer-extraction methods, and realised risk among accepted items. They are exploratory checks specified after the main results. Tables~\ref{tab:ordersensitivity}--\ref{tab:paired} report the rotation analyses, and Tables~\ref{tab:g1} and~\ref{tab:g2} report generation checks. Full per-rotation estimates and re-scoring margin diagnostics are supplied in the original R1--R5 and S92 CSV files.
+
+\input{generated/ordersensitivity.tex}
+
+\input{generated/rotationgaps.tex}
+
+\input{generated/paired.tex}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.94\textwidth]{figures/figB_rotations.pdf}
+\caption{P1 differences for each of four cyclic rotations (ticks) and their average (circle), with its 95\% key-bootstrap interval.}\label{fig:rotation}
+\end{figure}
+
+\input{generated/g1.tex}
+
+\input{generated/g2.tex}
+
+\begin{figure}[!t]\centering
+\includegraphics[width=0.74\textwidth]{figures/figC_interval_widths.pdf}
+\caption{Width ratios: double-resampled interval divided by fixed-calibration interval for the stated quantities. Wider intervals reflect uncertainty in selecting the policy.}\label{fig:widths}
+\end{figure}
+
+
+% Allow the preceding robustness figure to float above the next page, while text fills this page.
+\section{Model-assisted translation-equivalence screen}\label{model-assisted-screen}
+
+GPT-6 Astra Extra High was used in separate sessions to screen 80 keys: 50 development keys (seed 20261104; 11 STEM, 13 humanities, 12 social sciences and 14 other) and 30 test keys (seed 20261106; 7, 8, 7 and 8 in those groups). The first session rated five MSA--dialect pairs per key, giving 400 pairs. A second session rated 150 pairs from 20 development and 10 test keys, and a third adjudicated those pairs. The protocol withheld model predictions and scores. The screening sample includes both development and test material; the sessions use one model and are not independent human raters.
+
+Four checks allowed yes, no or unsure: Q1 asks whether meaning, conditions, quantities and terms are preserved; Q2 whether answer/options validity is preserved; Q3 whether the version is free of added hints or new ambiguity; Q4 whether the version belongs to the named dialect. The basic flag is Q1=no or Q2=no; the strict flag is any non-yes response in Q1--Q3. Thus the basic rate is composite and ``unsure'' is not equivalent to verified validity. Table~\ref{tab:auditflags} reproduces the first session's rates, with intervals clustered by question key. The screen intervals use 2,000 bootstrap replicates with seed 0 and lexicographically ordered keys. They replace the intervals from the original interactive analysis, whose seed was not recorded; rates and agreement estimates are unchanged. The accompanying text-free ratings and scripts reproduce these calculations and the association and sensitivity analyses below.
+
+\input{generated/auditflags.tex}
+
+The basic flag rate is 0.32 [0.25, 0.40] on development keys and 0.45 [0.33, 0.57] on test keys. Q2 is unsure on 29\% of pairs, so the complement of its 8\% negative rate cannot be interpreted as confirmed validity. Sampling and criteria differ from the resource authors' human quality check.
+
+Table~\ref{tab:auditagreement} reports agreement between the two screening sessions.
+
+\input{generated/auditagreement.tex}
+
+Q4 has $\kappa=0$ because one session assigned the same category to every double-rated pair, despite 98\% observed agreement. Q2 disagreement is mostly yes versus unsure. On the double-rated subset, basic flag rates are 0.34 in session one, 0.32 in session two and 0.33 after adjudication. Adjudication remains model-assisted rather than ground truth.
+
+The association analysis contains 1,600 pair--model observations sharing 80 keys; they are not 1,600 independent items. Accuracy differences from MSA are $-4.5$ percentage points for unflagged pairs and $-6.2$ for basic-flagged pairs, with a flagged-minus-unflagged contrast of $-1.8$ [$-8.2$, $+5.1$] points. Answer-change rates are 26.9\% and 27.7\%, with contrast $+0.8$ [$-6.2$, $+7.9$] points. These intervals permit a material association and do not establish independence from translation validity.
+
+Exclusions leave 45--54 keys per dialect. Mean answered-fraction differences remain negative ($-6$ to $-20$ points), but individual P1 estimates can change sign; Moroccan P1 interval widths range from 38 to 94 points. The full sensitivity CSV is supplied. Substituting MSA counterparts for flagged rows is a constructed scenario, not a clean dataset. The $f/(1-f)$ bound is uninformative here. Human equivalence labels remain unavailable.
+
+\FloatBarrier
+\section{Secondary and development analyses}\label{development-phase-experiments}
+
+S1 (calibration efficiency) and S3 (calibration error) are secondary confirmatory analyses specified in the original plan. S1 uses 500 repeated subsamples of own-variety calibration keys at sizes 25, 50, 100, 150, 200, 250 and 400, then evaluates the nominal 0.70 set-coverage target on the fixed test set. Its within-target frequency is the fraction of these calibration subsamples yielding test coverage within 0.05 of 0.70. S3 reports mean confidence, expected calibration error with 15 equal-width bins, and multiclass Brier score \cite{guo2017calibration}. Tables~\ref{tab:s1} and~\ref{tab:s3} summarise these results; full outputs are provided in the supplementary CSV files.
+
+\input{generated/s1.tex}
+
+\input{generated/s3.tex}
+
+Development experiments examined hidden-state variety routing, correctness probes and a mean-direction representation intervention. The log reports no consistent advantage that supported replacing the text router with an internal router, and no supported recovery from the representation intervention. Some early internal measurements required implementation corrections. These observations informed development but did not establish a mechanism for the confirmatory gaps; the historical development excerpt is included with the supplementary documentation.
+
+\FloatBarrier
+\begin{adjustwidth}{-\extralength}{0cm}
+\reftitle{References}
+\bibliography{references}
+\PublishersNote{}
+\end{adjustwidth}
+\end{document}

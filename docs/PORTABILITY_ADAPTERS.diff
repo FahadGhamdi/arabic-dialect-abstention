@@ -1,0 +1,51 @@
+--- archived/indep_check/recompute.py
++++ replay/indep_check/recompute.py
+@@ -23,7 +23,7 @@
+ import numpy as np
+ import pandas as pd
+ 
+-ROOT = "/home/claude/ada"
++ROOT = 'REPLAY_ROOT'
+ TAGS = ["ALLaM-7B-Instruct-preview", "Fanar-1-9B", "Qwen3-8B-Base", "gemma-2-9b"]
+ VARIETIES = ["MSA", "EGY", "SYR", "KSA", "UAE", "MAG", "ENG"]
+ R_STARS = ["0.15", "0.20", "0.25", "0.30"]  # strings -> exact Fractions
+--- archived/validity_analyze.py
++++ replay/validity_analyze.py
+@@ -57,7 +57,7 @@
+     fp=os.path.join("audit_in","flags.pkl")
+     if os.path.exists(fp): flags=pd.read_pickle(fp)
+     report.append("\n# L2 — Embedding fidelity covariate (multilingual-e5-large cosine, question+options) on the confirmatory test\n")
+-    desc=fid.groupby("dialect").sim_all.describe()[["mean","25%","50%","75%"]].round(3); report.append("Fidelity by variety (all 3,135 keys):\n\n"+desc.to_markdown()+"\n")
++    desc=fid.groupby("dialect").sim_all.describe()[["mean","25%","50%","75%"]].round(3); report.append("Fidelity by variety (all 3,135 keys):\n\n"+desc.to_string()+"\n")
+     if flags is not None:
+         fl=flags.reset_index().merge(fid,left_on=["key","d"],right_on=["key","dialect"]); fl["terc"]=fl.groupby("d").sim_all.transform(lambda s: pd.qcut(s.rank(method="first"),3,labels=["low","mid","high"]))
+         report.append("Model-assisted-screen flag rate by fidelity tercile (400 screened pairs): "+fl.groupby("terc").basic.mean().round(2).to_dict().__repr__()+"; Spearman(sim_all, flagged) = %.3f (p=%.3g)\n"%stats.spearmanr(fl.sim_all,fl.basic.astype(float)))
+--- archived/diag_analyze.py
++++ replay/diag_analyze.py
+@@ -67,26 +67,4 @@
+                            realised_risk_msa_thr=((1-T["C"][am,j]).mean() if am.any() else float("nan"))))
+     FIG[tag]=dict(D=D)
+ pd.DataFrame(D12).to_csv(os.path.join(OUT,"D1_D2_discrimination.csv"),index=False); pd.DataFrame(D4).to_csv(os.path.join(OUT,"D4_variety_threshold.csv"),index=False)
+-# ---------- D5 figure: one row per model; accuracy | AUROC with CI | answered@r*=0.20 under τ_MSA vs τ_v (realised risk annotated) ----------
+-import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt
+-d12=pd.DataFrame(D12); d4=pd.DataFrame(D4); models=sorted(d12.model.unique()); C1,C2,INK,MUTED="#2a78d6","#eb6834","#0b0b0b","#52514e"
+-plt.rcParams.update({"font.size":8.5,"axes.edgecolor":"#9a9892","axes.linewidth":0.6,"xtick.color":INK,"ytick.color":INK,"axes.labelcolor":INK,"text.color":INK})
+-fig,axes=plt.subplots(len(models),3,figsize=(10.5,2.3*len(models)),squeeze=False)
+-for r,m in enumerate(models):
+-    a=d12[d12.model==m].set_index("variety").reindex(FIG_ORDER); b=d4[(d4.model==m)&(d4.target_risk==R_PRIMARY)].set_index("variety").reindex(FIG_ORDER); x=np.arange(len(FIG_ORDER))
+-    ax=axes[r,0]; ax.bar(x,a.acc,color=C1,width=0.6); ax.set_ylim(0,1); ax.set_ylabel(m.replace("-Instruct-preview",""),fontweight="bold")
+-    for i,v in enumerate(a.acc): ax.text(i,v+0.02,f"{v:.2f}",ha="center",va="bottom",fontsize=7,color=MUTED)
+-    if r==0: ax.set_title("Accuracy (test, 1,420 keys)",fontsize=9)
+-    ax=axes[r,1]; ax.errorbar(x,a.auroc,yerr=[a.auroc-a.auroc_lo,a.auroc_hi-a.auroc],fmt="o",color=C1,ms=5,capsize=2,lw=1)
+-    ax.axhline(a.loc["MSA","auroc"],color=MUTED,lw=0.8,ls=":"); ax.set_ylim(0.65,0.87)
+-    if r==0: ax.set_title("AUROC of p_max for correctness [95% CI]",fontsize=9)
+-    ax=axes[r,2]; w=0.38; ax.bar(x-w/2,b.answered_msa_thr,width=w,color=C2,label="τ chosen on MSA (S4)"); ax.bar(x+w/2,b.answered_v_thr,width=w,color=C1,label="τ chosen on the variety")
+-    for i,(v1,v2,k1,k2) in enumerate(zip(b.answered_msa_thr,b.answered_v_thr,b.realised_risk_msa_thr,b.realised_risk_v_thr)):
+-        ax.text(i-w/2,v1+0.01,f"r={k1:.2f}",ha="center",va="bottom",fontsize=6,color=MUTED,rotation=90); ax.text(i+w/2,v2+0.01,f"r={k2:.2f}",ha="center",va="bottom",fontsize=6,color=MUTED,rotation=90)
+-    ax.set_ylim(0,1)
+-    if r==0: ax.set_title(f"Answered fraction at target risk r*={R_PRIMARY:.2f} (r = realised risk)",fontsize=9); ax.legend(frameon=False,fontsize=7,loc="upper right")
+-    for c in range(3):
+-        axes[r,c].set_xticks(x); axes[r,c].set_xticklabels(FIG_ORDER); axes[r,c].spines[["top","right"]].set_visible(False); axes[r,c].grid(axis="y",color="#e6e5e0",lw=0.6); axes[r,c].set_axisbelow(True)
+-fig.suptitle("Diagnostic views of the reliability cost (exploratory; specified after the confirmatory results, before computation)",fontsize=9.5,y=0.995)
+-fig.tight_layout(rect=(0,0,1,0.98)); fig.savefig(os.path.join(OUT,"diag_figure.png"),dpi=200); fig.savefig(os.path.join(OUT,"diag_figure.pdf"))
+ open(os.path.join(OUT,"DIAG_REPORT.md"),"w").write("\n".join(rep)+"\n"); print("\n".join(rep)); print("written",OUT)

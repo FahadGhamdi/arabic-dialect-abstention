@@ -1,0 +1,153 @@
+\documentclass[border=3pt]{standalone}
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots}
+\usetikzlibrary{calc}
+\pgfplotsset{compat=1.18}
+\begin{document}
+\begin{tikzpicture}
+\definecolor{dial0}{HTML}{F24A46}
+\definecolor{dial1}{HTML}{FD743C}
+\definecolor{dial2}{HTML}{2878D7}
+\definecolor{dial3}{HTML}{258B24}
+\definecolor{dial4}{HTML}{6B52CE}
+\begin{groupplot}[group style={group size=2 by 2,horizontal sep=1.05cm,vertical sep=1.65cm},
+width=6.35cm,height=4.7cm,scale only axis=false,
+xmin=-.345,xmax=.02,ymin=-.4,ymax=4.5,xtick={-.3,-.2,-.1,0},
+ytick={0,1,2,3,4},yticklabels={UAE,KSA,EGY,SYR,MAG},
+axis lines=left,axis line style={gray},tick style={gray},grid=major,grid style={gray!20},
+tick label style={font=\sffamily\small},title style={font=\sffamily\bfseries},
+xticklabel style={/pgf/number format/fixed,/pgf/number format/precision=1}]
+\nextgroupplot[title={ALLaM}]
+\addplot[gray,dashed,forget plot] coordinates {(0,-.4) (0,4.5)};
+\addplot[dial0,line width=.8pt] coordinates {(-0.284500000000,4) (-0.146987500000,4)};
+\addplot[only marks,mark=o,mark size=2.1pt,line width=.8pt,mark options={fill=white},dial0] coordinates {(-0.205500000000,4)};
+\addplot[dial0,line width=.8pt] coordinates {(-0.184000000000,4.1) (-0.184000000000,4.28)};
+\addplot[dial0,line width=.8pt] coordinates {(-0.234000000000,4.1) (-0.234000000000,4.28)};
+\addplot[dial0,line width=.8pt] coordinates {(-0.212000000000,4.1) (-0.212000000000,4.28)};
+\addplot[dial0,line width=.8pt] coordinates {(-0.192000000000,4.1) (-0.192000000000,4.28)};
+\addplot[dial1,line width=.8pt] coordinates {(-0.259012500000,3) (-0.138962500000,3)};
+\addplot[only marks,mark=o,mark size=2.1pt,line width=.8pt,mark options={fill=white},dial1] coordinates {(-0.192000000000,3)};
+\addplot[dial1,line width=.8pt] coordinates {(-0.188000000000,3.1) (-0.188000000000,3.2800000000000002)};
+\addplot[dial1,line width=.8pt] coordinates {(-0.182000000000,3.1) (-0.182000000000,3.2800000000000002)};
+\addplot[dial1,line width=.8pt] coordinates {(-0.226000000000,3.1) (-0.226000000000,3.2800000000000002)};
+\addplot[dial1,line width=.8pt] coordinates {(-0.172000000000,3.1) (-0.172000000000,3.2800000000000002)};
+\addplot[dial2,line width=.8pt] coordinates {(-0.211000000000,2) (-0.069000000000,2)};
+\addplot[only marks,mark=o,mark size=2.1pt,line width=.8pt,mark options={fill=white},dial2] coordinates {(-0.130000000000,2)};
+\addplot[dial2,line width=.8pt] coordinates {(-0.100000000000,2.1) (-0.100000000000,2.2800000000000002)};
+\addplot[dial2,line width=.8pt] coordinates {(-0.104000000000,2.1) (-0.104000000000,2.2800000000000002)};
+\addplot[dial2,line width=.8pt] coordinates {(-0.160000000000,2.1) (-0.160000000000,2.2800000000000002)};
+\addplot[dial2,line width=.8pt] coordinates {(-0.156000000000,2.1) (-0.156000000000,2.2800000000000002)};
+\addplot[dial3,line width=.8pt] coordinates {(-0.174500000000,1) (-0.049000000000,1)};
+\addplot[only marks,mark=o,mark size=2.1pt,line width=.8pt,mark options={fill=white},dial3] coordinates {(-0.096500000000,1)};
+\addplot[dial3,line width=.8pt] coordinates {(-0.100000000000,1.1) (-0.100000000000,1.28)};
+\addplot[dial3,line width=.8pt] coordinates {(-0.078000000000,1.1) (-0.078000000000,1.28)};
+\addplot[dial3,line width=.8pt] coordinates {(-0.116000000000,1.1) (-0.116000000000,1.28)};
+\addplot[dial3,line width=.8pt] coordinates {(-0.092000000000,1.1) (-0.092000000000,1.28)};
+\addplot[dial4,line width=.8pt] coordinates {(-0.144012500000,0) (-0.013000000000,0)};
+\addplot[only marks,mark=o,mark size=2.1pt,line width=.8pt,mark options={fill=white},dial4] coordinates {(-0.076500000000,0)};
+\addplot[dial4,line width=.8pt] coordinates {(-0.080000000000,0.1) (-0.080000000000,0.28)};
+\addplot[dial4,line width=.8pt] coordinates {(-0.034000000000,0.1) (-0.034000000000,0.28)};
+\addplot[dial4,line width=.8pt] coordinates {(-0.078000000000,0.1) (-0.078000000000,0.28)};
+\addplot[dial4,line width=.8pt] coordinates {(-0.114000000000,0.1) (-0.114000000000,0.28)};
+\nextgroupplot[title={Fanar}]
+\addplot[gray,dashed,forget plot] coordinates {(0,-.4) (0,4.5)};
+\addplot[dial0,line width=.8pt] coordinates {(-0.279500000000,4) (-0.164500000000,4)};
+\addplot[only marks,mark=o,mark size=2.1pt,line width=.8pt,mark options={fill=white},dial0] coordinates {(-0.224000000000,4)};
+\addplot[dial0,line width=.8pt] coordinates {(-0.222000000000,4.1) (-0.222000000000,4.28)};
+\addplot[dial0,line width=.8pt] coordinates {(-0.192000000000,4.1) (-0.192000000000,4.28)};
+\addplot[dial0,line width=.8pt] coordinates {(-0.246000000000,4.1) (-0.246000000000,4.28)};
+\addplot[dial0,line width=.8pt] coordinates {(-0.236000000000,4.1) (-0.236000000000,4.28)};
+\addplot[dial1,line width=.8pt] coordinates {(-0.296512500000,3) (-0.135000000000,3)};
+\addplot[only marks,mark=o,mark size=2.1pt,line width=.8pt,mark options={fill=white},dial1] coordinates {(-0.203500000000,3)};
+\addplot[dial1,line width=.8pt] coordinates {(-0.168000000000,3.1) (-0.168000000000,3.2800000000000002)};
+\addplot[dial1,line width=.8pt] coordinates {(-0.154000000000,3.1) (-0.154000000000,3.2800000000000002)};
+\addplot[dial1,line width=.8pt] coordinates {(-0.244000000000,3.1) (-0.244000000000,3.2800000000000002)};
+\addplot[dial1,line width=.8pt] coordinates {(-0.248000000000,3.1) (-0.248000000000,3.2800000000000002)};
+\addplot[dial2,line width=.8pt] coordinates {(-0.221025000000,2) (-0.092987500000,2)};
+\addplot[only marks,mark=o,mark size=2.1pt,line width=.8pt,mark options={fill=white},dial2] coordinates {(-0.153000000000,2)};
+\addplot[dial2,line width=.8pt] coordinates {(-0.162000000000,2.1) (-0.162000000000,2.2800000000000002)};
+\addplot[dial2,line width=.8pt] coordinates {(-0.150000000000,2.1) (-0.150000000000,2.2800000000000002)};
+\addplot[dial2,line width=.8pt] coordinates {(-0.140000000000,2.1) (-0.140000000000,2.2800000000000002)};
+\addplot[dial2,line width=.8pt] coordinates {(-0.160000000000,2.1) (-0.160000000000,2.2800000000000002)};
+\addplot[dial3,line width=.8pt] coordinates {(-0.185512500000,1) (-0.055462500000,1)};
+\addplot[only marks,mark=o,mark size=2.1pt,line width=.8pt,mark options={fill=white},dial3] coordinates {(-0.123500000000,1)};
+\addplot[dial3,line width=.8pt] coordinates {(-0.112000000000,1.1) (-0.112000000000,1.28)};
+\addplot[dial3,line width=.8pt] coordinates {(-0.100000000000,1.1) (-0.100000000000,1.28)};
+\addplot[dial3,line width=.8pt] coordinates {(-0.130000000000,1.1) (-0.130000000000,1.28)};
+\addplot[dial3,line width=.8pt] coordinates {(-0.152000000000,1.1) (-0.152000000000,1.28)};
+\addplot[dial4,line width=.8pt] coordinates {(-0.169012500000,0) (-0.053487500000,0)};
+\addplot[only marks,mark=o,mark size=2.1pt,line width=.8pt,mark options={fill=white},dial4] coordinates {(-0.103500000000,0)};
+\addplot[dial4,line width=.8pt] coordinates {(-0.080000000000,0.1) (-0.080000000000,0.28)};
+\addplot[dial4,line width=.8pt] coordinates {(-0.084000000000,0.1) (-0.084000000000,0.28)};
+\addplot[dial4,line width=.8pt] coordinates {(-0.110000000000,0.1) (-0.110000000000,0.28)};
+\addplot[dial4,line width=.8pt] coordinates {(-0.140000000000,0.1) (-0.140000000000,0.28)};
+\nextgroupplot[title={Qwen3}]
+\addplot[gray,dashed,forget plot] coordinates {(0,-.4) (0,4.5)};
+\addplot[dial0,line width=.8pt] coordinates {(-0.315500000000,4) (-0.207500000000,4)};
+\addplot[only marks,mark=o,mark size=2.1pt,line width=.8pt,mark options={fill=white},dial0] coordinates {(-0.252500000000,4)};
+\addplot[dial0,line width=.8pt] coordinates {(-0.254000000000,4.1) (-0.254000000000,4.28)};
+\addplot[dial0,line width=.8pt] coordinates {(-0.272000000000,4.1) (-0.272000000000,4.28)};
+\addplot[dial0,line width=.8pt] coordinates {(-0.244000000000,4.1) (-0.244000000000,4.28)};
+\addplot[dial0,line width=.8pt] coordinates {(-0.240000000000,4.1) (-0.240000000000,4.28)};
+\addplot[dial1,line width=.8pt] coordinates {(-0.317500000000,3) (-0.116987500000,3)};
+\addplot[only marks,mark=o,mark size=2.1pt,line width=.8pt,mark options={fill=white},dial1] coordinates {(-0.194500000000,3)};
+\addplot[dial1,line width=.8pt] coordinates {(-0.192000000000,3.1) (-0.192000000000,3.2800000000000002)};
+\addplot[dial1,line width=.8pt] coordinates {(-0.190000000000,3.1) (-0.190000000000,3.2800000000000002)};
+\addplot[dial1,line width=.8pt] coordinates {(-0.222000000000,3.1) (-0.222000000000,3.2800000000000002)};
+\addplot[dial1,line width=.8pt] coordinates {(-0.174000000000,3.1) (-0.174000000000,3.2800000000000002)};
+\addplot[dial2,line width=.8pt] coordinates {(-0.222000000000,2) (-0.074000000000,2)};
+\addplot[only marks,mark=o,mark size=2.1pt,line width=.8pt,mark options={fill=white},dial2] coordinates {(-0.142000000000,2)};
+\addplot[dial2,line width=.8pt] coordinates {(-0.166000000000,2.1) (-0.166000000000,2.2800000000000002)};
+\addplot[dial2,line width=.8pt] coordinates {(-0.106000000000,2.1) (-0.106000000000,2.2800000000000002)};
+\addplot[dial2,line width=.8pt] coordinates {(-0.156000000000,2.1) (-0.156000000000,2.2800000000000002)};
+\addplot[dial2,line width=.8pt] coordinates {(-0.140000000000,2.1) (-0.140000000000,2.2800000000000002)};
+\addplot[dial3,line width=.8pt] coordinates {(-0.200500000000,1) (-0.042500000000,1)};
+\addplot[only marks,mark=o,mark size=2.1pt,line width=.8pt,mark options={fill=white},dial3] coordinates {(-0.121500000000,1)};
+\addplot[dial3,line width=.8pt] coordinates {(-0.050000000000,1.1) (-0.050000000000,1.28)};
+\addplot[dial3,line width=.8pt] coordinates {(-0.180000000000,1.1) (-0.180000000000,1.28)};
+\addplot[dial3,line width=.8pt] coordinates {(-0.100000000000,1.1) (-0.100000000000,1.28)};
+\addplot[dial3,line width=.8pt] coordinates {(-0.156000000000,1.1) (-0.156000000000,1.28)};
+\addplot[dial4,line width=.8pt] coordinates {(-0.172500000000,0) (-0.034500000000,0)};
+\addplot[only marks,mark=o,mark size=2.1pt,line width=.8pt,mark options={fill=white},dial4] coordinates {(-0.089500000000,0)};
+\addplot[dial4,line width=.8pt] coordinates {(-0.052000000000,0.1) (-0.052000000000,0.28)};
+\addplot[dial4,line width=.8pt] coordinates {(-0.102000000000,0.1) (-0.102000000000,0.28)};
+\addplot[dial4,line width=.8pt] coordinates {(-0.116000000000,0.1) (-0.116000000000,0.28)};
+\addplot[dial4,line width=.8pt] coordinates {(-0.088000000000,0.1) (-0.088000000000,0.28)};
+\nextgroupplot[title={Gemma}]
+\addplot[gray,dashed,forget plot] coordinates {(0,-.4) (0,4.5)};
+\addplot[dial0,line width=.8pt] coordinates {(-0.290512500000,4) (-0.177987500000,4)};
+\addplot[only marks,mark=o,mark size=2.1pt,line width=.8pt,mark options={fill=white},dial0] coordinates {(-0.237000000000,4)};
+\addplot[dial0,line width=.8pt] coordinates {(-0.258000000000,4.1) (-0.258000000000,4.28)};
+\addplot[dial0,line width=.8pt] coordinates {(-0.230000000000,4.1) (-0.230000000000,4.28)};
+\addplot[dial0,line width=.8pt] coordinates {(-0.242000000000,4.1) (-0.242000000000,4.28)};
+\addplot[dial0,line width=.8pt] coordinates {(-0.218000000000,4.1) (-0.218000000000,4.28)};
+\addplot[dial1,line width=.8pt] coordinates {(-0.338512500000,3) (-0.188500000000,3)};
+\addplot[only marks,mark=o,mark size=2.1pt,line width=.8pt,mark options={fill=white},dial1] coordinates {(-0.248500000000,3)};
+\addplot[dial1,line width=.8pt] coordinates {(-0.222000000000,3.1) (-0.222000000000,3.2800000000000002)};
+\addplot[dial1,line width=.8pt] coordinates {(-0.272000000000,3.1) (-0.272000000000,3.2800000000000002)};
+\addplot[dial1,line width=.8pt] coordinates {(-0.280000000000,3.1) (-0.280000000000,3.2800000000000002)};
+\addplot[dial1,line width=.8pt] coordinates {(-0.220000000000,3.1) (-0.220000000000,3.2800000000000002)};
+\addplot[dial2,line width=.8pt] coordinates {(-0.212000000000,2) (-0.105500000000,2)};
+\addplot[only marks,mark=o,mark size=2.1pt,line width=.8pt,mark options={fill=white},dial2] coordinates {(-0.149500000000,2)};
+\addplot[dial2,line width=.8pt] coordinates {(-0.172000000000,2.1) (-0.172000000000,2.2800000000000002)};
+\addplot[dial2,line width=.8pt] coordinates {(-0.150000000000,2.1) (-0.150000000000,2.2800000000000002)};
+\addplot[dial2,line width=.8pt] coordinates {(-0.172000000000,2.1) (-0.172000000000,2.2800000000000002)};
+\addplot[dial2,line width=.8pt] coordinates {(-0.104000000000,2.1) (-0.104000000000,2.2800000000000002)};
+\addplot[dial3,line width=.8pt] coordinates {(-0.216512500000,1) (-0.113000000000,1)};
+\addplot[only marks,mark=o,mark size=2.1pt,line width=.8pt,mark options={fill=white},dial3] coordinates {(-0.153500000000,1)};
+\addplot[dial3,line width=.8pt] coordinates {(-0.168000000000,1.1) (-0.168000000000,1.28)};
+\addplot[dial3,line width=.8pt] coordinates {(-0.198000000000,1.1) (-0.198000000000,1.28)};
+\addplot[dial3,line width=.8pt] coordinates {(-0.140000000000,1.1) (-0.140000000000,1.28)};
+\addplot[dial3,line width=.8pt] coordinates {(-0.108000000000,1.1) (-0.108000000000,1.28)};
+\addplot[dial4,line width=.8pt] coordinates {(-0.190500000000,0) (-0.063000000000,0)};
+\addplot[only marks,mark=o,mark size=2.1pt,line width=.8pt,mark options={fill=white},dial4] coordinates {(-0.131000000000,0)};
+\addplot[dial4,line width=.8pt] coordinates {(-0.154000000000,0.1) (-0.154000000000,0.28)};
+\addplot[dial4,line width=.8pt] coordinates {(-0.136000000000,0.1) (-0.136000000000,0.28)};
+\addplot[dial4,line width=.8pt] coordinates {(-0.144000000000,0.1) (-0.144000000000,0.28)};
+\addplot[dial4,line width=.8pt] coordinates {(-0.090000000000,0.1) (-0.090000000000,0.28)};
+\end{groupplot}
+\node[font=\sffamily\small,anchor=north,yshift=-22pt] at ($(group c1r2.south)!0.5!(group c2r2.south)$) {$\Delta$P1 (dialect $-$ MSA), 500 keys};
+\node[font=\sffamily\footnotesize,anchor=north,yshift=-42pt] at ($(group c1r2.south)!0.5!(group c2r2.south)$) {$|$\quad Each of the four option rotations};
+\node[font=\sffamily\footnotesize,anchor=north,yshift=-57pt] at ($(group c1r2.south)!0.5!(group c2r2.south)$) {$-\!\circ\!-$\quad Order-averaged difference with 95\% key-bootstrap interval};
+\end{tikzpicture}
+\end{document}

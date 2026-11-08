@@ -1,0 +1,10 @@
+{
+  "seed": 0,
+  "replicates": 2000,
+  "source": "pilot scores for development keys; confirmatory scores for test keys",
+  "calibration": "808 confirmatory MSA calibration keys; fixed across bootstrap replicates",
+  "key_order": "lexicographic",
+  "sensitivity_resampling": "paired keys within each scenario",
+  "association_resampling": "80 question clusters retaining all dialects and models",
+  "p1_ties": "NumPy default argsort, matching archived metric definition"
+}

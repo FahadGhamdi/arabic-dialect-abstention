@@ -1,0 +1,169 @@
+{
+  "tables": {
+    "p1full": {
+      "rows": 24,
+      "source_files": [
+        "results/confirm/P1_selective.csv"
+      ],
+      "generated_sha256": "bc94fe60f2f4effcb2ae427b7842be39bf331cb4cb8d09e34632c036660b92ac"
+    },
+    "p2coverage": {
+      "rows": 20,
+      "source_files": [
+        "results/confirm/P2_conformal.csv",
+        "results/sens/S91_calibration_sensitivity.csv"
+      ],
+      "generated_sha256": "92ded5a4fccc6c682790148e00fb6c45202c2947f101b56c2f51f524d208323c"
+    },
+    "p2size": {
+      "rows": 20,
+      "source_files": [
+        "results/confirm/P2_conformal.csv",
+        "results/sens/S91_calibration_sensitivity.csv"
+      ],
+      "generated_sha256": "140c8de6d04568bf7bd2017d88e66476a23cc53e8bf1c7bed338091840b1da96"
+    },
+    "s4answers": {
+      "rows": 20,
+      "source_files": [
+        "results/confirm/S4_operational_selective.csv",
+        "results/sens/S91_calibration_sensitivity.csv"
+      ],
+      "generated_sha256": "7127f2827419bf0ba83d26b470dcf37e752ff6c9a91cf90ada46da0d9919b5dc"
+    },
+    "s4risk": {
+      "rows": 20,
+      "source_files": [
+        "results/supp/S101_risk_diff.csv"
+      ],
+      "generated_sha256": "496d284e10ffa70d2cadf0e3741f558aac0f62752e680ef53f9c6d72b4d58c28"
+    },
+    "d4points": {
+      "rows": 20,
+      "source_files": [
+        "results/diag/D4_variety_threshold.csv"
+      ],
+      "generated_sha256": "442a87bc420241ca037a0d58e34d51724de05b930c997c2af34b7dcb6bb0f483"
+    },
+    "d4gaps": {
+      "rows": 20,
+      "source_files": [
+        "results/diag/D4_variety_threshold.csv",
+        "results/sens/S91_calibration_sensitivity.csv"
+      ],
+      "generated_sha256": "5d91e7a47468d07750aaaf973bcf1ae93111181c35397d016991ab0eda3e036f"
+    },
+    "aradice": {
+      "rows": 8,
+      "source_files": [
+        "results/validity/L4_aradice.csv"
+      ],
+      "generated_sha256": "5e9853b6b5d6cb026fa179d8f40cb0761856c5727eb6f60c5de9a63dd9f7fc08"
+    },
+    "paired": {
+      "rows": 20,
+      "source_files": [
+        "results/sens/S93_R4_paired.csv"
+      ],
+      "generated_sha256": "403ddbecb8e6e2b1b46a53ffd0b14d31635de03dcb96d14f3334ff76707ef529"
+    },
+    "g1": {
+      "rows": 28,
+      "source_files": [
+        "results/robust/R5_generation.csv",
+        "results/supp/S102_gen_selective_risk.csv"
+      ],
+      "generated_sha256": "6a36a9b7293b16b03ed9d5d75a7657e954d924576df62e91c035702f26bfcf0a"
+    },
+    "accuracyfull": {
+      "rows": 7,
+      "source_files": [
+        "results/diag/D1_D2_discrimination.csv"
+      ],
+      "generated_sha256": "e10ba99c142256d7ee93e6231251c82120ccb9faa66c81440936f01ec2f5606c"
+    },
+    "s3": {
+      "rows": 7,
+      "source_files": [
+        "results/confirm/S3_calibration.csv"
+      ],
+      "generated_sha256": "ddb90c093979f1cc1577be219d68148b164bcd191c34377e39572414a429b532"
+    },
+    "s2full": {
+      "rows": 6,
+      "source_files": [
+        "results/confirm/S2_variety_aware.csv"
+      ],
+      "generated_sha256": "e6efdd1882ec0bb5651b9222657b2d56aefe9539c4cc1fe22690e6bf2286bfaa"
+    },
+    "ordersensitivity": {
+      "rows": 7,
+      "source_files": [
+        "results/robust/R1_order_sensitivity.csv"
+      ],
+      "generated_sha256": "1ff4ca7685f46fb3172437ab3ce395dad3acc5364b0c8c5fd925d0eeb5d7fee1"
+    },
+    "rotationgaps": {
+      "rows": 10,
+      "source_files": [
+        "results/robust/R2_gap_stability.csv"
+      ],
+      "generated_sha256": "142dbe9f0146eac8156bd453cb81cd533c2ebc1e281c15cc80135ea4019ed192"
+    },
+    "g2": {
+      "rows": 7,
+      "source_files": [
+        "results/robust/R5_generation.csv"
+      ],
+      "generated_sha256": "2b15048eadf7611375b499c953324e313db27b6cf3b543820c9764b6a569d2e0"
+    },
+    "s1": {
+      "rows": 7,
+      "source_files": [
+        "results/confirm/S1_calib_efficiency.csv"
+      ],
+      "generated_sha256": "083fd5929a7b1ce8762ecb8907e7d8f21b8a89823bbf5bd2c1d54da30eba3829"
+    },
+    "auditflags": {
+      "rows": 6,
+      "source_files": [
+        "../recomputed_screen/SCREEN_RECOMPUTED.md"
+      ],
+      "generated_sha256": "eb86356b8d048843be82ed6f65d62c54552c7e18b5464397a7274403ff3608cc"
+    },
+    "auditagreement": {
+      "rows": 4,
+      "source_files": [
+        "../recomputed_screen/SCREEN_RECOMPUTED.md"
+      ],
+      "generated_sha256": "dcf4f82219caaa77450ecceb3e7bf27d49e4670891c359875974bc1af296961a"
+    },
+    "indep": {
+      "rows": 7,
+      "source_files": [
+        "results/indep_check/INDEP_COMPARISON.md"
+      ],
+      "generated_sha256": "38cfef3a00a845e7557f417f4348627b5d07227dee9abccf8209249ee6104181"
+    }
+  },
+  "source_sha256": {
+    "results/confirm/P1_selective.csv": "b603b748aa0b77ee1f0fa5fdfe42e3a5c5b069292906c8d4ddcd0228685e1368",
+    "results/confirm/P2_conformal.csv": "dbaad4b3e5fda4fc1f675529c5e64ef7c2d3ae2c608322c7c9071767a3f84394",
+    "results/confirm/S4_operational_selective.csv": "abb770eef6961b51e2c0561319aab298717c45381460f248081f8d192446c50b",
+    "results/confirm/S2_variety_aware.csv": "bc028f19b30736f3760f633ffc03862302d7c2d1446c1d5ace72f248b7bd1d00",
+    "results/confirm/S1_calib_efficiency.csv": "057a36db6b1cff28d551a58a410ed9f0fb2b267d244ee943605f94f4d4b94478",
+    "results/confirm/S3_calibration.csv": "cdc077322f46d61f48e9463c22c64e59663ef9d368f83390b22dbd6ce66027f7",
+    "results/diag/D1_D2_discrimination.csv": "0a0aa3a03daf40034a0addcbd988566ee5a34ba0457e8a2c870e6de1c51e5b1d",
+    "results/diag/D4_variety_threshold.csv": "3b48274b57f27d2eb7729cca998720e99467c6932090a476be7940de24505576",
+    "results/sens/S91_calibration_sensitivity.csv": "d61b13260dec80f494b22ce39a71c4d870552897f11aab5647547f8a5a1c43af",
+    "results/supp/S101_risk_diff.csv": "41103c5a51ee2d7b20781226de97dc3cf86918d31b58a2ad8329c207dc39882c",
+    "results/validity/L4_aradice.csv": "aad72962fac10a3e300600427f7a6b3b4d3b5f1535f23c31a111a17067685f85",
+    "results/robust/R1_order_sensitivity.csv": "35e116fc2b442e4aeb5f61441026d26071c2f96f657a4a12ce098acf40d22116",
+    "results/robust/R2_gap_stability.csv": "583649d5d7dcc5d6e293f68ae083fbd26565db3d746f77af93f92f2d269ebcc8",
+    "results/sens/S93_R4_paired.csv": "eae7c72cb08498dc2e1a375352927a229de0407c6f7b2f3404d8c03be47927d6",
+    "results/robust/R5_generation.csv": "f5bf1cb3cd68d8d2f63b823cd66955434aa20c7cafe650346108d22015eefbb8",
+    "results/supp/S102_gen_selective_risk.csv": "0c74809baa0b6b5b117cf8c2b47a363fd06d2908748f56105cb602c706ab069a",
+    "../recomputed_screen/SCREEN_RECOMPUTED.md": "37cc0b7f00c4e6979f97db8aa94c6b706975e59c9f4a4a8c010238a5f1e91295",
+    "results/indep_check/INDEP_COMPARISON.md": "04bf78e2936cdf9ff7efdb32bf6224829d2facc9ead7a7fd6e08d9e3af7398ac"
+  }
+}
